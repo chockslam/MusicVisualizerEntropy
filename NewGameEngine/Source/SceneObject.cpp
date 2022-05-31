@@ -2,9 +2,17 @@
 
 SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, float pos[3], const char* gs)
 {
+	this->vs.append(vs);
+
+	if(gs)
+		this->gs.append(gs);
+
+	this->ps.append(ps);
+
 	this->initPos[0] = pos[0];
 	this->initPos[1] = pos[1];
 	this->initPos[2] = pos[2];
+
 	Reset();
 	if (pos) {
 		delete[] pos;

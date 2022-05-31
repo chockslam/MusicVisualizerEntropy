@@ -1,16 +1,34 @@
 #include "SceneManager.h"
 #include "ObjectFactory.h"
 
+
 void SceneManager::StartScene(Graphics& gfx, std::string scene)
 {
+	
+	// Add Particle System
+	AddParticleSystem(gfx);
+	
 	// Create 3 sphere-filled squares. Pixel Shader visualization.
 	FillSpheresAlgorithm(gfx,new float[] {-57.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqBMT_PS.cso", "Solid_RGBeqBTM_PS.cso", "");
 	FillSpheresAlgorithm(gfx ,new float[] {-47.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMTB_PS.cso", "Solid_RGBeqTMB_PS.cso", "");
 	FillSpheresAlgorithm(gfx, new float[] {-37.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMBT_PS.cso", "Solid_RGBeqTBM_PS.cso", "");
-
-
+	
 	// Geometry + Pixel Shader visualization
 	makeGeometrySphere(gfx);
+
+	this->testPsys = ObjectFactory::getInstance().getOM()->QueryObject<WrapperSolidSphere>();
+
+	this->testPsys;
+
+}
+
+void SceneManager::Update()
+{
+}
+
+void SceneManager::AddParticleSystem(Graphics& gfx)
+{
+	ObjectFactory::getInstance().AddParticleSystem(gfx, { 1.0f,1.0f,1.0f }, { 2.0f, 2.0f, 2.0f }, {255.0f,255.0f ,255.0f ,255.0f }, { 255.0f,255.0f ,255.0f ,255.0f },0.5f,0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", new float[3]{ -50.0f, -1.0f, 10.0f });
 }
 
 void SceneManager::makeGeometrySphere(Graphics& gfx)

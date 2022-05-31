@@ -18,7 +18,7 @@ public:
 		const float lattitudeAngle = PI / latDiv;
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
-		std::vector<Vertex> vertices;
+		std::vector<VertexMaths> vertices;
 		for (int iLat = 1; iLat < latDiv; iLat++)
 		{
 			const auto latBase = dx::XMVector3Transform(

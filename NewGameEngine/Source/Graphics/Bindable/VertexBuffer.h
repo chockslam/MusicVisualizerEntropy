@@ -2,15 +2,7 @@
 
 #pragma once
 #include "Bindable.h"
-
-/// <summary>
-/// Vertex layout contains position and normal.
-/// </summary>
-struct Vertex
-{
-	DirectX::XMFLOAT3 pos;
-	DirectX::XMFLOAT3 n;
-};
+#include "../Vertex.h"
 
 /// <summary>
 /// Class that represents Vertex Buffer D3D resoruce.

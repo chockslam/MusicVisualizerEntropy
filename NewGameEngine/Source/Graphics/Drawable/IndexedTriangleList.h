@@ -2,7 +2,11 @@
 #pragma once
 #include <vector>
 #include <DirectXMath.h>
-
+struct VertexMaths
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 n;
+};
 /// <summary>
 /// IndexTriangleList represents any shape in the program that is supposed be drawn via DrawIndexed function.
 /// Stores indices and vertices
@@ -11,7 +15,7 @@ class IndexedTriangleList
 {
 public:
 	IndexedTriangleList() = default;
-	IndexedTriangleList(std::vector<Vertex> verts_in, std::vector<unsigned short> indices_in)
+	IndexedTriangleList(std::vector<VertexMaths> verts_in, std::vector<unsigned short> indices_in)
 		:
 		vertices(std::move(verts_in)),
 		indices(std::move(indices_in))
@@ -54,6 +58,6 @@ public:
 	}
 
 public:
-	std::vector<Vertex> vertices;									// Vertices
-	std::vector<unsigned short> indices;							// Indices
+	std::vector<VertexMaths> vertices;									// Vertices
+	std::vector<unsigned short> indices;								// Indices
 };

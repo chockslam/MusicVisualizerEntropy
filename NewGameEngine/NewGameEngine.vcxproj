@@ -94,6 +94,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Audio\AudioIO.cpp" />
     <ClCompile Include="Source\Common\GDIPlusManager.cpp" />
+    <ClCompile Include="Source\Common\Random.cpp" />
     <ClCompile Include="Source\FileDialog\ImGuiFileDialog.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\Bindable.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\BindableCodex.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="Source\Graphics\Bindable\VertexBuffer.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\VertexShader.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\Drawable.cpp" />
+    <ClCompile Include="Source\Graphics\Drawable\Particle.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\SolidSphere.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\WrapperSolidSphere.cpp" />
     <ClCompile Include="Source\Graphics\Graphics.cpp" />
@@ -132,6 +134,8 @@
     <ClInclude Include="Source\Common\EWin.h" />
     <ClInclude Include="Source\Common\GDIPlusManager.h" />
     <ClInclude Include="Source\Common\GUIconst.h" />
+    <ClInclude Include="Source\Common\Random.h" />
+    <ClInclude Include="Source\Common\Utilities.h" />
     <ClInclude Include="Source\Common\WNDconst.h" />
     <ClInclude Include="Source\FileDialog\dirent\dirent.h" />
     <ClInclude Include="Source\FileDialog\ImGuiFileDialog.h" />
@@ -152,6 +156,7 @@
     <ClInclude Include="Source\Graphics\Drawable\Drawable.h" />
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Graphics\Drawable\Particle.h" />
     <ClInclude Include="Source\Graphics\Drawable\SolidSphere.h" />
     <ClInclude Include="Source\Graphics\Drawable\Sphere.h" />
     <ClInclude Include="Source\Graphics\Drawable\WrapperSolidSphere.h" />
@@ -159,6 +164,7 @@
     <ClInclude Include="Source\Graphics\Graphics.h" />
     <ClInclude Include="Source\Graphics\NewCamera.h" />
     <ClInclude Include="Source\Graphics\Surface.h" />
+    <ClInclude Include="Source\Graphics\Vertex.h" />
     <ClInclude Include="Source\GUI\GUImanager.h" />
     <ClInclude Include="Source\GUI\GUIwrap.h" />
     <ClInclude Include="Source\ObjectFactory.h" />

@@ -17,6 +17,8 @@ public:
 	void DeleteAll();										// Delete all objects in the pObjectList && pObjectCollidable
 	void DeleteInactive();									// Delete all objects that became 'inactive'
 	void InactivateAll();									// Inactivate all objects.
+	template<class T> std::shared_ptr<T> QueryObject();
+	template<class T> std::list<std::shared_ptr<T>> QueryObjectList();
 	virtual ~ObjectManager() {};
 	void startScene(Graphics& gfx, std::string scene);
 private:
@@ -24,3 +26,29 @@ private:
 	std::shared_ptr<SceneManager> sm;
 };
 
+template<class T>
+inline std::shared_ptr<T> ObjectManager::QueryObject()
+{
+	for (auto& pb : pObjectList)
+	{
+		if (auto pt = std::dynamic_pointer_cast<T>(pb))
+		{
+			return std::move(pt);
+		}
+	}
+	return nullptr;
+}
+
+template<class T>
+inline std::list<std::shared_ptr<T>> ObjectManager::QueryObjectList()
+{
+	std::list<std::shared_ptr<T>> list;
+	for (auto& pb : pObjectList)
+	{
+		if (auto pt = std::dynamic_pointer_cast<T>(pb))
+		{
+			list.push_back(pt);
+		}
+	}
+	return list;
+}

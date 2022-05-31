@@ -179,6 +179,12 @@
     <ClCompile Include="Source\Audio\AudioIO.cpp">
       <Filter>Source Files\Audio\Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Common\Random.cpp">
+      <Filter>Source Files\Common\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Drawable\Particle.cpp">
+      <Filter>Source Files\Graphics\Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window\SubObject.h">
@@ -347,6 +353,20 @@
     </ClInclude>
     <ClInclude Include="Source\Audio\AudioIO.h">
       <Filter>Source Files\Audio\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Common\Random.h">
+      <Filter>Source Files\Common\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\Particle.h">
+      <Filter>Source Files\Graphics\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Graphics\Vertex.h">
+      <Filter>Source Files\Graphics\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Utilities.h">
+      <Filter>Source Files\Common\Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

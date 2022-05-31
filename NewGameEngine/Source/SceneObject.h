@@ -2,6 +2,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include <memory>
 #include "Graphics/Graphics.h"
 #include "Graphics/Drawable/SolidSphere.h"
@@ -23,11 +24,10 @@ private:
 	virtual void _Reset() = 0;
 
 protected:
+	std::string vs, ps, gs;
 	bool active;
 	float initPos[3];
 	DirectX::XMFLOAT3 pos;											// position of the object
-	std::list<std::shared_ptr<Drawable>> meshes;
-
-
+	std::vector<std::shared_ptr<Drawable>> meshes;
 };
 

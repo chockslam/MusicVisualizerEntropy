@@ -8,6 +8,8 @@ public:
 	GUImanager();
 	void Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam);
 	void LoadTextures(Graphics& gfx);
+
+private:
 	bool AudioToggled();		// Checks whether the audio was toggled between "playing" and "paused"
 	void HandlePauseViaKeyboard(Keyboard& kbd);
 	void HandleActivatorsViaKeyboard(Keyboard& kbd);
@@ -19,7 +21,7 @@ public:
 	void LookAround(Mouse& mouse, Camera& cam);
 	void MoveAround(Keyboard& kbd, Camera& cam);
 	void ToggleCursor(Window& wnd);
-private:
+
 	void playNewFile();
 	// Facilitate a delay between presses of buttons.
 	int kdTimer;
