@@ -71,8 +71,8 @@ Particle::Particle(Graphics& gfx, float radius, int latDiv, int longDiv, const c
 
 DirectX::XMMATRIX Particle::GetTransformXM() const
 {
-	auto transform	= DirectX::XMMatrixScaling(this->size.x, this->size.y, this->size.z);
-	transform		*= DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+	auto transform	= DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+	transform		*= DirectX::XMMatrixScaling(this->size.x, this->size.y, this->size.z);
 	return transform;													// Returns model transformation matrix in world space
 }
 
@@ -87,14 +87,18 @@ ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, Direct
 	sizeBegin(SizeBegin),
 	sizeEnd(SizeEnd),
 	sizeVariation(SizeVariation),
-	lifeTime(LifeTime)
+	lifeTime(LifeTime),
+	cbuf(gfx),
+	cbufG(gfx, 1u)
 {
-	for (int i = 1; i <= 5; i++) {
+	for (int i = 1; i <= 1000; i++) {
 		auto particle = std::make_shared<Particle>(gfx, 0.4f, 12, 24, vs,  ps, gs);
 		particle->SetPos(this->pos);
 		this->meshes.push_back(std::move(particle));
 	}
 	this->active = true;
+	
+
 }
 
 void ParticleSystem::StartParticles(std::string type)
@@ -116,7 +120,7 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 			if (typeid(*drawable) == typeid(Particle)) {
 				auto particle = std::dynamic_pointer_cast<Particle>(drawable);
 			
-				if (!particle->LifeRemaining <= 0.0f)
+				if (particle->LifeRemaining <= 0.0f)
 				{
 					particle->deactivate();
 					continue;
@@ -140,13 +144,26 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 				particle->size.y *= interpolSize;
 				particle->size.z *= interpolSize;
 
-				
-				cbData.color.x = std::lerp(particle->ColorEnd.x, particle->ColorBegin.x, life);
-				cbData.color.y = std::lerp(particle->ColorEnd.y, particle->ColorBegin.y, life);
-				cbData.color.z = std::lerp(particle->ColorEnd.z, particle->ColorBegin.z, life);
 
-				cbuf.Update(gfx, cbData);
+
+				float x = std::lerp(particle->ColorEnd.x, particle->ColorBegin.x, life);
+				float y = std::lerp(particle->ColorEnd.y, particle->ColorBegin.y, life);
+				float z = std::lerp(particle->ColorEnd.z, particle->ColorBegin.z, life);
+
+				particle->currentColor[0] = x;
+				particle->currentColor[1] = y;
+				particle->currentColor[2] = z;
+				DirectX::XMVECTOR currentColor = { particle->currentColor[0], particle->currentColor[1], particle->currentColor[2] };
+				auto dataCopy = cbData;
+				//DirectX::XMVECTOR color = ;
+				//const auto pos = DirectX::XMLoadFloat3(pos);
+				DirectX::XMStoreFloat3(&dataCopy.color, currentColor);
+
+				cbuf.Update(gfx, dataCopy);
+				cbufG.Update(gfx, dataCopy);
+				
 				cbuf.Bind(gfx);
+				cbufG.Bind(gfx);
 
 			}
 		
@@ -162,13 +179,6 @@ void ParticleSystem::Draw(Graphics& gfx) const
 		for (auto& drawable : this->meshes) {
 			if (!drawable->isActive())
 				continue;
-			//if (typeid(*drawable) == typeid(Particle)) {
-			//	
-			//	auto particle = std::dynamic_pointer_cast<Particle>(drawable);
-			//	
-			//}
-			
-			//drawable->SetPos(this->pos);
 			drawable->Draw(gfx);
 		}
 	}
@@ -179,7 +189,7 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	auto particleAsDrawable = this->meshes[poolIndex];
 	std::shared_ptr<Particle> particle = nullptr;
 
-	if (typeid(particleAsDrawable) == typeid(Particle)) {
+	if (typeid(*particleAsDrawable) == typeid(Particle)) {
 		particle = std::dynamic_pointer_cast<Particle>(particleAsDrawable);
 	}
 
@@ -205,8 +215,15 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 
 }
 
+void ParticleSystem::Reset()
+{
+	SceneObject::Reset();
+	this->_Reset();
+}
+
 void ParticleSystem::_Reset()
 {
-	this->pos = { this->initPos[0], this->initPos[1], this->initPos[2] };
-	//this->pos = { this->initPos[0], this->initPos[1], this->initPos[2] };
+	this->cbData = {
+		{ 0.0f,0.0f,0.0f }
+	};
 }

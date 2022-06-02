@@ -2,6 +2,12 @@
 #include "ObjectFactory.h"
 
 
+SceneManager::SceneManager()
+	:
+	partCount(0)
+{
+}
+
 void SceneManager::StartScene(Graphics& gfx, std::string scene)
 {
 	
@@ -16,14 +22,17 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 	// Geometry + Pixel Shader visualization
 	makeGeometrySphere(gfx);
 
-	this->testPsys = ObjectFactory::getInstance().getOM()->QueryObject<WrapperSolidSphere>();
+	//this->partCount = 0;
 
-	this->testPsys;
 
 }
 
 void SceneManager::Update()
 {
+	//if (this->partCount < 100) {
+	//	this->partCount++;
+		ObjectFactory::getInstance().getOM()->EmitParticles();
+	//}
 }
 
 void SceneManager::AddParticleSystem(Graphics& gfx)

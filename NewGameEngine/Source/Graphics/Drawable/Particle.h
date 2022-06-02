@@ -28,7 +28,8 @@ public:
 	void StartParticles(std::string type = "sphere");
 	virtual void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const;
 	virtual void Draw(Graphics& gfx) const;
-	virtual void Emit(const ParticleProps& properties);
+	void Emit(const ParticleProps& properties);
+	void Reset();
 private:
 	virtual void _Reset();
 
@@ -37,9 +38,10 @@ private:
 		alignas(16) DirectX::XMFLOAT3 color;
 	};
 
-	mutable ParticleCBuf cbData;											// Struct object declared above.
+	ParticleCBuf cbData;											// Struct object declared above.
 	mutable PixelConstantBuffer<ParticleCBuf> cbuf;							// Pixel Constant buffer that uses structure declared above as a data.
-	
+	mutable GeometryConstantBuffer<ParticleCBuf> cbufG;			// Geometry Constant buffer that uses structure declared above as a data.
+
 
 	DirectX::XMFLOAT3 velocity, velocityVariation;
 	DirectX::XMFLOAT4 colorBegin, colorEnd;
@@ -61,11 +63,14 @@ class Particle : public Drawable
 public:
 	Particle(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, const char* gs);
 	DirectX::XMMATRIX GetTransformXM() const  override;
+	
 private:
 	
-
 	DirectX::XMFLOAT3 velocity;
 	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
+	
+	float currentColor[3];
+
 	float SizeBegin, SizeEnd;
 
 	float LifeTime = 1.0f;

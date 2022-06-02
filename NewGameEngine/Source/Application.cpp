@@ -39,6 +39,7 @@ Application::Application()
 
 	this->om = std::make_shared<ObjectManager>();
 	ObjectFactory::getInstance().SetUpObjectManager(om);
+	ObjectFactory::getInstance().SetUpLevelManager();
 	this->om->startScene(wnd.Gfx(), "Scene_1");
 
 	this->gm = std::make_shared<GUImanager>();

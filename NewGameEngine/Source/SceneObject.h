@@ -17,6 +17,7 @@ public:
 	virtual void Draw(Graphics& gfx) const ;
 	void deactivate();
 	void activate();
+	virtual DirectX::XMFLOAT3 getPos() { return this->pos; };
 	bool IsActive() { return this->active; };
 	virtual void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const  = 0;
 	
