@@ -30,7 +30,7 @@ void WrapperSolidSphere::Reset()
 
 
 
-void WrapperSolidSphere::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const 
+void WrapperSolidSphere::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const
 {
 	if (this->active) {
 		auto dataCopy = cbData;

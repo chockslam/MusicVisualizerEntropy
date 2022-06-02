@@ -6,7 +6,9 @@ class Graphics;
 class GUImanager {
 public:
 	GUImanager();
-	void Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam);
+	void Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam, float timeFrame);
+	void Start(Camera& cam);
+
 	void LoadTextures(Graphics& gfx);
 
 private:
@@ -17,14 +19,17 @@ private:
 	void ViewOne(Camera& cam);			// Go to View One
 	void ViewTwo(Camera& cam);			// Go to View Two
 	void ViewThree(Camera& cam);			// Go to View Three
-	void Control(Window& wnd, Camera& cam);
+	void Control(Window& wnd, Camera& cam, float timeFrame);
 	void LookAround(Mouse& mouse, Camera& cam);
-	void MoveAround(Keyboard& kbd, Camera& cam);
+	void MoveAround(Keyboard& kbd, Camera& cam, float speed_factor);
 	void ToggleCursor(Window& wnd);
 
 	void playNewFile();
+
+
 	// Facilitate a delay between presses of buttons.
 	int kdTimer;
+
 
 	// Variables that facilitate Play/Pause audio functionality
 	bool AudioIsPlaying;

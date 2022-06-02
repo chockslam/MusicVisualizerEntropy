@@ -6,9 +6,9 @@ class SceneManager
 public:
 	SceneManager();
 	void StartScene(Graphics& gfx, std::string scene);
-	void Update();
+	void Update(float timeFrame);
 private:
-
+	float kdTimeForParticles;
 	int partCount;
 	void AddParticleSystem(Graphics& gfx);
 	void makeGeometrySphere(Graphics& gfx);

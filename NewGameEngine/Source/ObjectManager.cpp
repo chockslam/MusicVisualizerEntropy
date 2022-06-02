@@ -6,13 +6,13 @@ void ObjectManager::AddObject(std::shared_ptr<SceneObject> obj)
 	this->pObjectList.push_back(std::move(obj));
 }
 
-void ObjectManager::UpdateAll(Graphics& gfx, DirectX::XMMATRIX viewMatrix, float musParams[3])
+void ObjectManager::UpdateAll(Graphics& gfx, DirectX::XMMATRIX viewMatrix, float musParams[3], float timeFrame)
 {
 	for (auto& obj : this->pObjectList) {
-		obj->Bind(gfx, viewMatrix, musParams);
+		obj->Bind(gfx, viewMatrix, musParams, timeFrame);
 	}
 	if(sm)
-		sm->Update();
+		sm->Update(timeFrame);
 }
 
 void ObjectManager::RenderAll(Graphics& gfx)
@@ -77,18 +77,18 @@ void ObjectManager::EmitParticles()
 
 		DirectX::XMFLOAT3 Velocity;
 
-		Velocity.x = 0.05f;
-		Velocity.y = 0.05f;
-		Velocity.z = 0.05f;
+		Velocity.x = 0.000000000000000000000000000000000000005f;
+		Velocity.y = 0.000000000000000000000000000000000000005f;
+		Velocity.z = 0.000000000000000000000000000000000000005f;
 
 		prop.Velocity = Velocity;
 		
 
 		DirectX::XMFLOAT3 VelocityVariation;
 
-		VelocityVariation.x = 0.4f;
-		VelocityVariation.y = 0.4f;
-		VelocityVariation.z = 0.4f;
+		VelocityVariation.x = 0.0000000000000000000000005f;
+		VelocityVariation.y = 0.0000000000000000000000005f;
+		VelocityVariation.z = 0.0000000000000000000000005f;
 		
 		prop.VelocityVariation = VelocityVariation;
 		partsys->Emit(prop);

@@ -4,7 +4,8 @@
 
 SceneManager::SceneManager()
 	:
-	partCount(0)
+	partCount(0),
+	kdTimeForParticles(5.0f)
 {
 }
 
@@ -22,16 +23,25 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 	// Geometry + Pixel Shader visualization
 	makeGeometrySphere(gfx);
 
+
+
+
 	//this->partCount = 0;
 
 
 }
 
-void SceneManager::Update()
+void SceneManager::Update(float timeFrame)
 {
 	//if (this->partCount < 100) {
 	//	this->partCount++;
+
+	if (this->kdTimeForParticles < 0.0f) {
 		ObjectFactory::getInstance().getOM()->EmitParticles();
+		this->kdTimeForParticles = 5.0f;
+	}
+	this->kdTimeForParticles -= timeFrame;
+
 	//}
 }
 

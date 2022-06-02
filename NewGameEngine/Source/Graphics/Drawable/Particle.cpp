@@ -108,7 +108,7 @@ void ParticleSystem::StartParticles(std::string type)
 	}
 }
 
-void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const
+void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const
 {
 
 	if (this->active) {
@@ -126,11 +126,11 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 					continue;
 				}
 
-				particle->LifeRemaining -= 0.0016f;
+				particle->LifeRemaining -= 0.00016f;
 
-				particle->velocity.x *= 0.0016f;
-				particle->velocity.y *= 0.0016f;
-				particle->velocity.z *= 0.0016f;
+				particle->velocity.x += timeFrame;
+				particle->velocity.y += timeFrame;
+				particle->velocity.z += timeFrame;
 			
 				particle->pos.x += particle->velocity.x;
 				particle->pos.y += particle->velocity.y;
@@ -150,9 +150,11 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 				float y = std::lerp(particle->ColorEnd.y, particle->ColorBegin.y, life);
 				float z = std::lerp(particle->ColorEnd.z, particle->ColorBegin.z, life);
 
+				
 				particle->currentColor[0] = x;
 				particle->currentColor[1] = y;
 				particle->currentColor[2] = z;
+				
 				DirectX::XMVECTOR currentColor = { particle->currentColor[0], particle->currentColor[1], particle->currentColor[2] };
 				auto dataCopy = cbData;
 				//DirectX::XMVECTOR color = ;

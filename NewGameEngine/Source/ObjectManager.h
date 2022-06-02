@@ -13,7 +13,7 @@ public:
 	ObjectManager() {};
 	void AddObject(std::shared_ptr<SceneObject> obj);		// ObjectFactory related method
 	void SetLevelManager(std::shared_ptr<SceneManager> sm) { if(!this->sm) this->sm = std::move(sm); };
-	void UpdateAll(Graphics& gfx, DirectX::XMMATRIX viewMatrix, float musParams[3]);						// Update all objects in the pObjectList
+	void UpdateAll(Graphics& gfx, DirectX::XMMATRIX viewMatrix, float musParams[3], float timeFrame);						// Update all objects in the pObjectList
 	void RenderAll(Graphics& gfx);										// Render all objects in the pObjectList
 	void DeleteAll();										// Delete all objects in the pObjectList && pObjectCollidable
 	void DeleteInactive();									// Delete all objects that became 'inactive'

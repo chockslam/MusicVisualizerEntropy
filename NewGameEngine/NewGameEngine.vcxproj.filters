@@ -185,6 +185,9 @@
     <ClCompile Include="Source\Graphics\Drawable\Particle.cpp">
       <Filter>Source Files\Graphics\Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Common\Timer.cpp">
+      <Filter>Source Files\Common\Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window\SubObject.h">
@@ -367,6 +370,10 @@
     </ClInclude>
     <ClInclude Include="Source\Common\Utilities.h">
       <Filter>Source Files\Common\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Common\Timer.h">
+      <Filter>Source Files\Common\Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

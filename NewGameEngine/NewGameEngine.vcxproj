@@ -95,6 +95,7 @@
     <ClCompile Include="Source\Audio\AudioIO.cpp" />
     <ClCompile Include="Source\Common\GDIPlusManager.cpp" />
     <ClCompile Include="Source\Common\Random.cpp" />
+    <ClCompile Include="Source\Common\Timer.cpp" />
     <ClCompile Include="Source\FileDialog\ImGuiFileDialog.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\Bindable.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\BindableCodex.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="Source\Common\GDIPlusManager.h" />
     <ClInclude Include="Source\Common\GUIconst.h" />
     <ClInclude Include="Source\Common\Random.h" />
+    <ClInclude Include="Source\Common\Timer.h" />
     <ClInclude Include="Source\Common\Utilities.h" />
     <ClInclude Include="Source\Common\WNDconst.h" />
     <ClInclude Include="Source\FileDialog\dirent\dirent.h" />

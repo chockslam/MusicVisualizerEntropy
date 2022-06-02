@@ -2,15 +2,16 @@
 #include "GUIwrap.h"
 #include "../Audio/AudioIO.h"
 
+
 #include "../Common/WNDconst.h"
+#include "../Common/GUIconst.h"
 
 GUImanager::GUImanager()
 {
-	this->speed_factor = 0.2f;
-	this->ViewIndicator = 1;
+	
 }
 
-void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam )
+void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam, float timeFrame)
 {
 	
 	this->ToggleCursor(wnd);
@@ -45,9 +46,24 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 	}
 	else{
 		this->ViewIndicator = 0;
-		this->Control(wnd, cam);
+		this->Control(wnd, cam, timeFrame);
 	}
 	
+}
+
+void GUImanager::Start(Camera& cam)
+{
+	this->ViewOne(cam); // Start with the first view.
+
+	// Play Default Audio when program is started.
+	if (AudioIO::getInstance().OpenFile(WAV_FILE)) {
+		AudioIO::getInstance().PlayAudio();
+	}
+	else {
+		MessageBox(0, "Failed to Load Audio", 0, 0);
+	}
+	this->speed_factor = 10.0f;
+	this->ViewIndicator = 1;
 }
 
 void GUImanager::LoadTextures(Graphics& gfx)
@@ -116,32 +132,32 @@ void GUImanager::ViewThree(Camera& cam)
 	cam.SetRotation(GS_PS_Rot);
 }
 
-void GUImanager::Control(Window& wnd, Camera& cam)
+void GUImanager::Control(Window& wnd, Camera& cam, float timeFrame)
 {
 	this->LookAround(wnd.mouse, cam);
-	this->MoveAround(wnd.kbd, cam);
+	this->MoveAround(wnd.kbd, cam, timeFrame);
 }
 
 void GUImanager::LookAround(Mouse& mouse, Camera& cam)
 {
 	while (const auto ev = mouse.ReadRawDelta()) {
-		cam.AdjustRotation((float)ev->y * 0.01f, (float)ev->x * 0.01f, 0);
+		cam.AdjustRotation((float)ev->y * 0.001f * this->speed_factor, (float)ev->x * 0.001f * this->speed_factor, 0);
 	}
 }
 
-void GUImanager::MoveAround(Keyboard& kbd, Camera& cam)
+void GUImanager::MoveAround(Keyboard& kbd, Camera& cam, float speed_factor)
 {
 	if (kbd.KeyIsPressed('W'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetForwardVector(), speed_factor));
+		cam.AdjustPosition(dx::XMVectorScale(cam.GetForwardVector(), speed_factor * 50.0f));
 
 	if (kbd.KeyIsPressed('S'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetBackwardVector(), speed_factor));
+		cam.AdjustPosition(dx::XMVectorScale(cam.GetBackwardVector(), speed_factor * 50.0f));
 
 	if (kbd.KeyIsPressed('A'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetLeftVector(), speed_factor));
+		cam.AdjustPosition(dx::XMVectorScale(cam.GetLeftVector(), speed_factor * 50.0f));
 
 	if (kbd.KeyIsPressed('D'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetRightVector(), speed_factor));
+		cam.AdjustPosition(dx::XMVectorScale(cam.GetRightVector(), speed_factor * 50.0f));
 
 }
 

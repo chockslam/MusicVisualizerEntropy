@@ -26,7 +26,7 @@ public:
 	ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, float pos[3], const char* gs = nullptr);
 	virtual ~ParticleSystem() {};
 	void StartParticles(std::string type = "sphere");
-	virtual void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const;
+	virtual void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const;
 	virtual void Draw(Graphics& gfx) const;
 	void Emit(const ParticleProps& properties);
 	void Reset();
