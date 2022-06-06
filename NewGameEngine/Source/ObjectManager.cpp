@@ -47,51 +47,55 @@ void ObjectManager::EmitParticles()
 {
 		auto partsys = QueryObject<ParticleSystem>();
 
-		ParticleProps prop;	
+		if (partsys) {
+			ParticleProps prop;
 
-		DirectX::XMFLOAT4 colorB;
+			DirectX::XMFLOAT4 colorB;
+
+			colorB.x = 255.0f;
+			colorB.y = 255.0f;
+			colorB.z = 255.0f;
+			colorB.w = 255.0f;
+
+
+			prop.ColorBegin = colorB;
+
+			DirectX::XMFLOAT4 colorE;
+
+			colorE.x = 1.0f;
+			colorE.y = 1.0f;
+			colorE.z = 1.0f;
+			colorE.w = 1.0f;
+
+			prop.ColorEnd = colorE;
+
+			prop.LifeTime = 0.5f;
+			prop.Position = partsys->getPos();
+			prop.SizeBegin = 1.0f;
+			prop.SizeEnd = 0.1f;
+			prop.SizeVariation = 0.1f;
+
+
+			DirectX::XMFLOAT3 Velocity;
+
+			Velocity.x = 0.1f;
+			Velocity.y = 0.1f;
+			Velocity.z = 0.1f;
+
+			prop.Velocity = Velocity;
+
+
+			DirectX::XMFLOAT3 VelocityVariation;
+
+			VelocityVariation.x = 0.2f;
+			VelocityVariation.y = 0.2f;
+			VelocityVariation.z = 0.2f;
+
+			prop.VelocityVariation = VelocityVariation;
+			partsys->Emit(prop);
+		}
+
 		
-		colorB.x = 255.0f;
-		colorB.y = 255.0f;
-		colorB.z = 255.0f;
-		colorB.w = 255.0f;
-		
-
-		prop.ColorBegin = colorB;
-
-		DirectX::XMFLOAT4 colorE;
-		
-		colorE.x = 1.0f;
-		colorE.y = 1.0f;
-		colorE.z = 1.0f;
-		colorE.w = 1.0f;
-		
-		prop.ColorEnd = colorE;
-
-		prop.LifeTime = 2.0f;
-		prop.Position = partsys->getPos();
-		prop.SizeBegin = 2.0f;
-		prop.SizeEnd = 0.3f;
-		prop.SizeVariation = 0.1f;
-
-
-		DirectX::XMFLOAT3 Velocity;
-
-		Velocity.x = 0.000000000000000000000000000000000000005f;
-		Velocity.y = 0.000000000000000000000000000000000000005f;
-		Velocity.z = 0.000000000000000000000000000000000000005f;
-
-		prop.Velocity = Velocity;
-		
-
-		DirectX::XMFLOAT3 VelocityVariation;
-
-		VelocityVariation.x = 0.0000000000000000000000005f;
-		VelocityVariation.y = 0.0000000000000000000000005f;
-		VelocityVariation.z = 0.0000000000000000000000005f;
-		
-		prop.VelocityVariation = VelocityVariation;
-		partsys->Emit(prop);
 
 }
 

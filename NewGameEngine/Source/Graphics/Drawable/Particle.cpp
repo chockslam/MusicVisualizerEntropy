@@ -30,8 +30,8 @@ Particle::Particle(Graphics& gfx, float radius, int latDiv, int longDiv, const c
 		GS_St = "";
 
 	// Add binds to the vector using Bindable Codex.
-	AddBind(VertexBuffer::Resolve(gfx, "sphere_vertices" + GS_St, convertVertexStructres(model.vertices)));
-	AddBind(IndexBuffer::Resolve(gfx, "sphere_indices" + GS_St, model.indices));
+	AddBind(VertexBuffer::Resolve(gfx, "sphere_vertices" + GS_St + "Particle", convertVertexStructres(model.vertices)));
+	AddBind(IndexBuffer::Resolve(gfx, "sphere_indices" + GS_St + "Particle", model.indices));
 
 
 	// Vertex Shader 
@@ -66,13 +66,18 @@ Particle::Particle(Graphics& gfx, float radius, int latDiv, int longDiv, const c
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
 
+	this->velocity = { 0.01f, 0.01f , 0.01f };
+
 	this->active = false;
 }
 
 DirectX::XMMATRIX Particle::GetTransformXM() const
 {
-	auto transform	= DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
-	transform		*= DirectX::XMMatrixScaling(this->size.x, this->size.y, this->size.z);
+	auto transform =
+		DirectX::XMMatrixIdentity() *
+		DirectX::XMMatrixScaling(this->size.x, this->size.y, this->size.z) *
+		DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+		
 	return transform;													// Returns model transformation matrix in world space
 }
 
@@ -92,8 +97,9 @@ ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, Direct
 	cbufG(gfx, 1u)
 {
 	for (int i = 1; i <= 1000; i++) {
-		auto particle = std::make_shared<Particle>(gfx, 0.4f, 12, 24, vs,  ps, gs);
+		auto particle = std::make_shared<Particle>(gfx, 1.0f, 12, 24, vs,  ps, gs);
 		particle->SetPos(this->pos);
+		//particle->SetSize();
 		this->meshes.push_back(std::move(particle));
 	}
 	this->active = true;
@@ -126,12 +132,12 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 					continue;
 				}
 
-				particle->LifeRemaining -= 0.00016f;
+				particle->LifeRemaining -= timeFrame*2.0f;
 
-				particle->velocity.x += timeFrame;
-				particle->velocity.y += timeFrame;
-				particle->velocity.z += timeFrame;
-			
+				particle->velocity.x += timeFrame * 0.1f;
+				particle->velocity.y += timeFrame * 0.1f;
+				particle->velocity.z += timeFrame * 0.1f;
+				//
 				particle->pos.x += particle->velocity.x;
 				particle->pos.y += particle->velocity.y;
 				particle->pos.z += particle->velocity.z;
@@ -140,10 +146,13 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 				float life = particle->LifeRemaining / particle->LifeTime;
 
 				float interpolSize = std::lerp(particle->SizeEnd, particle->SizeBegin, life);
-				particle->size.x *= interpolSize;
-				particle->size.y *= interpolSize;
-				particle->size.z *= interpolSize;
+				if (particle->size.x >= 0) {
 
+					particle->size.x -= interpolSize * timeFrame * 10;
+					particle->size.y -= interpolSize * timeFrame * 10;
+					particle->size.z -= interpolSize * timeFrame * 10;
+
+				}
 
 
 				float x = std::lerp(particle->ColorEnd.x, particle->ColorBegin.x, life);
@@ -162,9 +171,11 @@ void ParticleSystem::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParam
 				DirectX::XMStoreFloat3(&dataCopy.color, currentColor);
 
 				cbuf.Update(gfx, dataCopy);
-				cbufG.Update(gfx, dataCopy);
 				
 				cbuf.Bind(gfx);
+
+				cbufG.Update(gfx, dataCopy);
+
 				cbufG.Bind(gfx);
 
 			}
@@ -196,7 +207,7 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	}
 
 	particle->active = true;
-	particle->SetPos(properties.Position);
+	//particle->SetPos(properties.Position);
 
 	// Velocity
 	particle->velocity    =	properties.Velocity;
@@ -212,6 +223,11 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	particle->LifeRemaining = properties.LifeTime;
 	particle->SizeBegin		= properties.SizeBegin + properties.SizeVariation * (Random::Float() - 0.5f);
 	particle->SizeEnd		= properties.SizeEnd;
+	
+
+	particle->size.x = particle->SizeBegin;
+	particle->size.y = particle->SizeBegin;
+	particle->size.z = particle->SizeBegin;
 
 	poolIndex = --poolIndex % this->meshes.size();
 

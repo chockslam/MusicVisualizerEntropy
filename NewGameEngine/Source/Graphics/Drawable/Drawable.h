@@ -36,9 +36,9 @@ public:
 	void deactivate() { this->active = false; };
 protected:
 	void AddBind(std::shared_ptr<Bindable> bind) ;						// Add Bindable to the vector of bindables
-	
 	DirectX::XMFLOAT3 pos = { 1.0f,1.0f,1.0f };
 	DirectX::XMFLOAT3 size = {1.0f, 1.0f, 1.0f};
+	DirectX::XMFLOAT4X4 transform;
 	bool active;
 private:
 	const class IndexBuffer* pIndexBuffer = nullptr;							// Index Buffer

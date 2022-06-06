@@ -67,7 +67,7 @@ void Application::DoFrame(float timeFrame)
 	// Begin Frame with background colour = rgb(0.07,0.0,0.12)
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 
-		wnd.Gfx().SetCamera(cam.GetViewMatrix()); // Update Projection with camera view.
+		wnd.Gfx().SetCamera(cam.GetMatrix()); // Update Projection with camera view.
 		
 
 		// Musparams update.
@@ -76,7 +76,7 @@ void Application::DoFrame(float timeFrame)
 		musParams[2] = static_cast<float>(AudioIO::getInstance().audio->averageT) * weightOfParams[2];
 
 		this->gm->Update(musParams, weightOfParams, wnd, cam, timeFrame);
-		this->om->UpdateAll(wnd.Gfx(), cam.GetViewMatrix(), musParams, timeFrame);
+		this->om->UpdateAll(wnd.Gfx(), cam.GetMatrix(), musParams, timeFrame);
 		this->om->RenderAll(wnd.Gfx());
 	
 	wnd.Gfx().EndFrame();

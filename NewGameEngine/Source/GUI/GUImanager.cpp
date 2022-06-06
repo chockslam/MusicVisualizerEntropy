@@ -11,14 +11,13 @@ GUImanager::GUImanager()
 	
 }
 
-void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, Camera& cam, float timeFrame)
+void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame)
 {
 	
 	this->ToggleCursor(wnd);
 
 	this->kdTimer = (this->kdTimer == COOL_DOWN) ? COOL_DOWN : this->kdTimer + 1; // Handle "Cool Down for keyboard shortcuts" functionality.
 	this->AudioWasPlaying = this->AudioIsPlaying;
-	
 	if (wnd.CursorEnabled) {
 
 		this->HandleViews(wnd.kbd, cam);
@@ -51,9 +50,9 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 	
 }
 
-void GUImanager::Start(Camera& cam)
+void GUImanager::Start(ChiliCamera& cam)
 {
-	this->ViewOne(cam); // Start with the first view.
+	//this->ViewOne(cam); // Start with the first view.
 
 	// Play Default Audio when program is started.
 	if (AudioIO::getInstance().OpenFile(WAV_FILE)) {
@@ -96,7 +95,7 @@ void GUImanager::HandleActivatorsViaKeyboard(Keyboard& kbd)
 	}
 }
 
-void GUImanager::HandleViews(Keyboard& kbd, Camera& cam)
+void GUImanager::HandleViews(Keyboard& kbd, ChiliCamera& cam)
 {
 	if (kbd.KeyIsPressed('1')) {
 		this->ViewOne(cam);
@@ -111,54 +110,55 @@ void GUImanager::HandleViews(Keyboard& kbd, Camera& cam)
 		}
 }
 
-void GUImanager::ViewOne(Camera& cam)
+void GUImanager::ViewOne(ChiliCamera& cam)
 {
 	this->ViewIndicator = 1;
-	cam.SetPosition(BothViewPos);
-	cam.SetRotation(BothViewRot);
+	cam.setPos(BothViewPos);
+	cam.setOrient(BothViewRot.x, BothViewRot.y);
 }
 
-void GUImanager::ViewTwo(Camera& cam)
+void GUImanager::ViewTwo(ChiliCamera& cam)
 {
 	this->ViewIndicator = 2;
-	cam.SetPosition(GSPos);
-	cam.SetRotation(GS_PS_Rot);
+	cam.setPos(GSPos);
+	cam.setOrient(GS_PS_Rot.x, GS_PS_Rot.y);
 }
 
-void GUImanager::ViewThree(Camera& cam)
+void GUImanager::ViewThree(ChiliCamera& cam)
 {
 	this->ViewIndicator = 3;
-	cam.SetPosition(PSPos);
-	cam.SetRotation(GS_PS_Rot);
+	cam.setPos(PSPos);
+	cam.setOrient(GS_PS_Rot.x, GS_PS_Rot.y);
 }
 
-void GUImanager::Control(Window& wnd, Camera& cam, float timeFrame)
+void GUImanager::Control(Window& wnd, ChiliCamera& cam, float timeFrame)
 {
-	this->LookAround(wnd.mouse, cam);
+	this->LookAround(wnd.mouse, cam, timeFrame);
 	this->MoveAround(wnd.kbd, cam, timeFrame);
 }
 
-void GUImanager::LookAround(Mouse& mouse, Camera& cam)
+void GUImanager::LookAround(Mouse& mouse, ChiliCamera& cam, float timeframe)
 {
 	while (const auto ev = mouse.ReadRawDelta()) {
-		cam.AdjustRotation((float)ev->y * 0.001f * this->speed_factor, (float)ev->x * 0.001f * this->speed_factor, 0);
+		cam.Rotate((float)ev->x * timeframe, (float)ev->y * timeframe);
 	}
 }
 
-void GUImanager::MoveAround(Keyboard& kbd, Camera& cam, float speed_factor)
+void GUImanager::MoveAround(Keyboard& kbd, ChiliCamera& cam, float speed_factor)
 {
 	if (kbd.KeyIsPressed('W'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetForwardVector(), speed_factor * 50.0f));
-
+		// cam.AdjustPosition(dx::XMVectorScale(cam.GetForwardVector(), speed_factor * 50.0f));
+		cam.Translate({0.0f,0.0f,speed_factor});
 	if (kbd.KeyIsPressed('S'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetBackwardVector(), speed_factor * 50.0f));
+		// cam.AdjustPosition(dx::XMVectorScale(cam.GetBackwardVector(), speed_factor * 50.0f));
+		cam.Translate({ 0.0f,0.0f,-speed_factor });
 
 	if (kbd.KeyIsPressed('A'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetLeftVector(), speed_factor * 50.0f));
-
+		// cam.AdjustPosition(dx::XMVectorScale(cam.GetLeftVector(), speed_factor * 50.0f));
+		cam.Translate({ -speed_factor,0.0f,0.0f });
 	if (kbd.KeyIsPressed('D'))
-		cam.AdjustPosition(dx::XMVectorScale(cam.GetRightVector(), speed_factor * 50.0f));
-
+		// cam.AdjustPosition(dx::XMVectorScale(cam.GetRightVector(), speed_factor * 50.0f));
+		cam.Translate({ speed_factor,0.0f,0.0f });
 }
 
 void GUImanager::ToggleCursor(Window& wnd)

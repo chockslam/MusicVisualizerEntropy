@@ -108,6 +108,7 @@
     <ClCompile Include="Source\Graphics\Bindable\TransformCbuf.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\VertexBuffer.cpp" />
     <ClCompile Include="Source\Graphics\Bindable\VertexShader.cpp" />
+    <ClCompile Include="Source\Graphics\ChiliCamera.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\Drawable.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\Particle.cpp" />
     <ClCompile Include="Source\Graphics\Drawable\SolidSphere.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Source\Graphics\Bindable\TransformCbuf.h" />
     <ClInclude Include="Source\Graphics\Bindable\VertexBuffer.h" />
     <ClInclude Include="Source\Graphics\Bindable\VertexShader.h" />
+    <ClInclude Include="Source\Graphics\ChiliCamera.h" />
     <ClInclude Include="Source\Graphics\Drawable\Drawable.h" />
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />

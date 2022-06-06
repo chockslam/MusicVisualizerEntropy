@@ -158,18 +158,33 @@ const dx::XMVECTOR& Camera::GetLeftVector()
 
 void Camera::UpdateViewMatrix() //Updates view matrix and also updates the movement vectors.
 {
+	
+	//using namespace DirectX;
+	//
+	//const dx::XMVECTOR forwardBaseVector = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	//// apply the camera rotations to a base vector
+	//const auto lookVector = XMVector3Transform(forwardBaseVector,
+	//	XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, 0.0f)
+	//);
+	//// generate camera transform (applied to all objects to arrange them relative
+	//// to camera position/orientation in world) from cam position and direction
+	//// camera "top" always faces towards +Y (cannot do a barrel roll)
+	//const auto camPosition = XMLoadFloat3(&pos);
+	//const auto camTarget = camPosition + lookVector;
+	//return XMMatrixLookAtLH(camPosition, camTarget, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+	//
 	// Calculate camera rotation matrix.
 	dx::XMMATRIX camRotationMatrix = dx::XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z);
 	// Calculate unit vector of cam target based off camera forward value transformed by cam rotation matrix.
 	dx::XMVECTOR camTarget = dx::XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, camRotationMatrix);
 	// Adjust cam target to be offset by the camera's current position.
 	camTarget = dx::XMVectorAdd(camTarget, posVector);
-
+	
 	// Calculate up direction based on current rotation.
 	dx::XMVECTOR upDir = XMVector3TransformCoord(this->DEFAULT_UP_VECTOR, camRotationMatrix);
 	// Rebuild view matrix.
 	this->viewMatrix = dx::XMMatrixLookAtLH(this->posVector, camTarget, upDir);
-
+	
 	// Rotation matrix constructed from roll and pitch values.
 	dx::XMMATRIX vecRotationMatrix = dx::XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, 0);
 	

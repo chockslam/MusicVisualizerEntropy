@@ -1,6 +1,6 @@
 #pragma once
 #include "Window/Window.h"
-#include "Graphics/NewCamera.h"
+#include "Graphics/ChiliCamera.h"
 #include "Common/GUIconst.h"
 #include "Common/Timer.h"
 #include "Graphics/Drawable/WrapperSolidSphere.h"
@@ -28,7 +28,7 @@ private:
 	Window wnd;
 
 	// Represents camera.
-	Camera cam;
+	ChiliCamera cam;
 
 
 	// Represents a game timer

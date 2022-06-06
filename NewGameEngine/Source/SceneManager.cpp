@@ -5,7 +5,7 @@
 SceneManager::SceneManager()
 	:
 	partCount(0),
-	kdTimeForParticles(5.0f)
+	kdTimeForParticles(0.01f)
 {
 }
 
@@ -38,7 +38,7 @@ void SceneManager::Update(float timeFrame)
 
 	if (this->kdTimeForParticles < 0.0f) {
 		ObjectFactory::getInstance().getOM()->EmitParticles();
-		this->kdTimeForParticles = 5.0f;
+		this->kdTimeForParticles = 0.01f;
 	}
 	this->kdTimeForParticles -= timeFrame;
 
@@ -47,7 +47,7 @@ void SceneManager::Update(float timeFrame)
 
 void SceneManager::AddParticleSystem(Graphics& gfx)
 {
-	ObjectFactory::getInstance().AddParticleSystem(gfx, { 1.0f,1.0f,1.0f }, { 2.0f, 2.0f, 2.0f }, {255.0f,255.0f ,255.0f ,255.0f }, { 255.0f,255.0f ,255.0f ,255.0f },0.5f,0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", new float[3]{ -50.0f, -1.0f, 10.0f });
+	ObjectFactory::getInstance().AddParticleSystem(gfx, { 0.000005f,0.00005f,0.00005f }, { 0.000005f, 0.000005f, 0.000005f }, {255.0f,255.0f ,255.0f ,255.0f }, { 255.0f,255.0f ,255.0f ,255.0f },0.5f,0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", new float[3]{ -50.0f, -5.0f, 10.0f });
 }
 
 void SceneManager::makeGeometrySphere(Graphics& gfx)
