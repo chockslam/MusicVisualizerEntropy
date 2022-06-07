@@ -10,6 +10,7 @@ SceneManager::SceneManager()
 }
 
 void SceneManager::StartScene(Graphics& gfx, std::string scene)
+	
 {
 	
 	// Add Particle System
@@ -23,7 +24,7 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 	// Geometry + Pixel Shader visualization
 	makeGeometrySphere(gfx);
 
-
+	
 
 
 	//this->partCount = 0;
@@ -31,23 +32,74 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 
 }
 
-void SceneManager::Update(float timeFrame)
+void SceneManager::Update(float musParams[3], float timeFrame)
 {
 	//if (this->partCount < 100) {
 	//	this->partCount++;
+	
+	testPS->Update(musParams, timeFrame);
 
 	if (this->kdTimeForParticles < 0.0f) {
-		ObjectFactory::getInstance().getOM()->EmitParticles();
+		this->EmitParticles();
 		this->kdTimeForParticles = 0.01f;
 	}
 	this->kdTimeForParticles -= timeFrame;
-
+	
 	//}
+}
+
+void SceneManager::EmitParticles()
+{
+	ParticleProps prop;
+
+	DirectX::XMFLOAT4 colorB;
+
+	colorB.x = 255.0f;
+	colorB.y = 164.0f;
+	colorB.z = 25.0f;
+	colorB.w = 255.0f;
+
+
+	prop.ColorBegin = colorB;
+
+	DirectX::XMFLOAT4 colorE;
+
+	colorE.x = 0.0f;
+	colorE.y = 0.0f;
+	colorE.z = 0.0f;
+	colorE.w = 0.0f;
+
+	prop.ColorEnd = colorE;
+
+	prop.LifeTime = 3.5f;
+	prop.Position = testPS->getPos();
+	prop.SizeBegin = 1.0f;
+	prop.SizeEnd = 0.2f;
+	prop.SizeVariation = 0.1f;
+
+
+	DirectX::XMFLOAT3 Velocity;
+
+	Velocity.x = 0.1f;
+	Velocity.y = 0.1f;
+	Velocity.z = 0.1f;
+
+	prop.Velocity = Velocity;
+
+
+	DirectX::XMFLOAT3 VelocityVariation;
+
+	VelocityVariation.x = 0.2f;
+	VelocityVariation.y = 0.2f;
+	VelocityVariation.z = 0.2f;
+
+	prop.VelocityVariation = VelocityVariation;
+	testPS->Emit(prop);
 }
 
 void SceneManager::AddParticleSystem(Graphics& gfx)
 {
-	ObjectFactory::getInstance().AddParticleSystem(gfx, { 0.000005f,0.00005f,0.00005f }, { 0.000005f, 0.000005f, 0.000005f }, {255.0f,255.0f ,255.0f ,255.0f }, { 255.0f,255.0f ,255.0f ,255.0f },0.5f,0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", new float[3]{ -50.0f, -5.0f, 10.0f });
+	testPS =  std::make_unique<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", new float[3]{ -50.0f, -5.0f, 10.0f });
 }
 
 void SceneManager::makeGeometrySphere(Graphics& gfx)

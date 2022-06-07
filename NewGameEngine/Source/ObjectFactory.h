@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "ObjectManager.h"
-#include "Graphics/Drawable/Particle.h"
+#include "Graphics/Particle_Systems/ParticleSystem.h"
 class ObjectFactory
 {
 public:

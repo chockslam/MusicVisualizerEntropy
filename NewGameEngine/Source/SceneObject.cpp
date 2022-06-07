@@ -41,6 +41,7 @@ void SceneObject::Draw(Graphics& gfx) const
 	if (this->active) {
 		for (auto& mesh : this->meshes) {
 			mesh->SetPos(this->pos);
+			mesh->SetSize(this->size);
 			mesh->Draw(gfx);
 		}
 	}
@@ -54,6 +55,40 @@ void SceneObject::deactivate()
 void SceneObject::activate()
 {
 	this->active = true;
+}
+
+void SceneObject::SetPos(DirectX::XMFLOAT3 pos)
+{
+	this->pos = pos;
+}
+
+void SceneObject::SetSize(DirectX::XMFLOAT3 size)
+{
+	this->size = size;
+}
+
+void SceneObject::adjustSize(DirectX::XMFLOAT3 dSize)
+{
+	this->size.x += dSize.x;
+	this->size.y += dSize.y;
+	this->size.z += dSize.z;
+}
+
+void SceneObject::adjustPosition(DirectX::XMFLOAT3 dPos)
+{
+	this->pos.x += dPos.x;
+	this->pos.y += dPos.y;
+	this->pos.z += dPos.z;
+}
+
+DirectX::XMFLOAT3 SceneObject::GetPos()
+{
+	return this->pos;
+}
+
+ DirectX::XMFLOAT3 SceneObject::GetSize()
+{
+	return this->size;
 }
 
 

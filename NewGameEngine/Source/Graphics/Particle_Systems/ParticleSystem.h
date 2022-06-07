@@ -1,52 +1,46 @@
 #pragma once
 
-#include "../../SceneObject.h"
+#include "ParticleWrapper.h"
 
 
 /// <summary>
-/// Struct represents Particle Properties.
+/// Particle Properties.
 /// Thanks to https://github.com/TheCherno/OneHourParticleSystem/blob/master/OpenGL-Sandbox/src/ParticleSystem.h.
 /// Love you to death, TheCherno.
 /// </summary>
 struct ParticleProps
 {
-	DirectX::XMFLOAT2 Position;
-	DirectX::XMFLOAT2 Velocity, VelocityVariation;
+
+	DirectX::XMFLOAT3 Position;
+	DirectX::XMFLOAT3 Velocity, VelocityVariation;
 	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
 	float SizeBegin, SizeEnd, SizeVariation;
 	float LifeTime = 1.0f;
+
 };
 
-/// <summary>
-/// Class represents Particle System.
-/// Thanks to https://github.com/TheCherno/OneHourParticleSystem/blob/master/OpenGL-Sandbox/src/ParticleSystem.h.
-/// Love you to death, TheCherno.
-/// </summary>
-class ParticleSystem: public SceneObject
+class ParticleSystem
 {
 public:
-	ParticleSystem();
+	ParticleSystem() {};
+	ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, float pos[3], const char* gs = nullptr);
+	virtual ~ParticleSystem() {};
+	virtual void Update(float musParams[3], float timeFrame) const;
+	void Emit(const ParticleProps& properties);
+	DirectX::XMFLOAT3 getPos() { return this->pos; };
 
-	virtual void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3]) const;
-	virtual void Draw(Graphics& gfx) const;
-
-	void Emit(const ParticleProps& particleProps);
 private:
-	struct Particle
-	{
-		DirectX::XMFLOAT2 Position;
-		float Rotation = 0.0f;
-		float SizeBegin, SizeEnd;
-		float LifeTime = 1.0f;
-		float LifeRemaining = 0.0f;
-		bool Active = false;
-	};
 
-	DirectX::XMFLOAT2 Velocity;
-	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
+	
+	DirectX::XMFLOAT3 pos, velocity, velocityVariation;
+	DirectX::XMFLOAT4 colorBegin, colorEnd;
+	float sizeBegin, sizeEnd, sizeVariation;
+	float lifeTime;
+	int poolIndex = 999;
 
-	//std::vector<Particle> m_ParticlePool;
-	uint32_t m_PoolIndex = 999;
+	bool active;
 
-	int m_QuadVA = 0;
+
+	std::vector<std::shared_ptr<ParticleWrapper>> particles;
+
 };
