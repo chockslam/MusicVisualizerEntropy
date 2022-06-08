@@ -26,7 +26,7 @@ void ParticleWrapper::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musPara
 	if (this->active) {
 		auto dataCopy = cbData;
 		//const auto pos = DirectX::XMLoadFloat3(pos);
-		DirectX::XMVECTOR color = { currentColor[0], currentColor[1], currentColor[2] };
+		DirectX::XMVECTOR color = { currentColor.x, currentColor.y, currentColor.z };
 
 		DirectX::XMStoreFloat3(&dataCopy.color, color);
 
@@ -40,10 +40,28 @@ void ParticleWrapper::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musPara
 	}
 }
 
+//void ParticleWrapper::Draw(Graphics& gfx) const
+//{
+//	if (this->active) {
+//		for (auto& mesh : this->meshes) {
+//			if (!this->currentColor.x && !this->currentColor.y && !this->currentColor.z)
+//				continue;
+//			mesh->SetPos(this->pos);
+//			mesh->SetSize(this->size);
+//			mesh->Draw(gfx);
+//		}
+//	}
+//}
+
 
 void ParticleWrapper::_Reset()
 {
 	this->cbData = {
 		{ 0.0f,0.0f,0.0f },
 	};
+
+
+	this->currentColor.x = ColorBegin.x;
+	this->currentColor.y = ColorBegin.y;
+	this->currentColor.z = ColorBegin.z;
 }

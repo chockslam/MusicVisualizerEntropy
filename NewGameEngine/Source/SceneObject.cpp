@@ -9,12 +9,12 @@ SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX:
 
 	this->ps.append(ps);
 
-	this->initPos[0] = pos.x;
-	this->initPos[1] = pos.y;
-	this->initPos[2] = pos.z;
+	this->initPos.x = pos.x;
+	this->initPos.y = pos.y;
+	this->initPos.z = pos.z;
 
 	Reset();
-
+	
 }
 
 SceneObject::~SceneObject()
@@ -27,7 +27,9 @@ SceneObject::~SceneObject()
 void SceneObject::Reset() 
 {
 
-	this->pos = { this->initPos[0], this->initPos[1], this->initPos[2] };
+	this->pos.x = initPos.x;
+	this->pos.y = initPos.y;
+	this->pos.z = initPos.z;
 	
 }
 

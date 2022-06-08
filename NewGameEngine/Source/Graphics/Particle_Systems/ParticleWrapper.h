@@ -7,7 +7,7 @@ public:
 	ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr);
 	void Reset();
 	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const;
-	
+	//void Draw(Graphics& gfx) const;
 	bool isActive() { return this->active; };
 	void activate() { this->active = true; };
 	void deactivate() { this->active = false; };
@@ -28,7 +28,7 @@ private:
 	DirectX::XMFLOAT3 velocity;
 	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
 
-	float currentColor[3];
+	DirectX::XMFLOAT3 currentColor;
 
 	float SizeBegin, SizeEnd;
 

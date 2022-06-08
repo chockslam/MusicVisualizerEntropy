@@ -47,6 +47,7 @@ void ParticleSystem::Update(float musParams[3], float timeFrame) const
 				if (particle->LifeRemaining <= 0.0f)
 				{
 					particle->deactivate();
+					particle->Reset();
 					continue;
 				}
 
@@ -80,9 +81,9 @@ void ParticleSystem::Update(float musParams[3], float timeFrame) const
 				float z = std::lerp(particle->ColorEnd.z, particle->ColorBegin.z, life);
 
 
-				particle->currentColor[0] = x;
-				particle->currentColor[1] = y;
-				particle->currentColor[2] = z;
+				particle->currentColor.x = x;
+				particle->currentColor.y = y;
+				particle->currentColor.z = z;
 
 				//DirectX::XMVECTOR currentColor = { particle->currentColor[0], particle->currentColor[1], particle->currentColor[2] };
 				//auto dataCopy = cbData;
@@ -126,6 +127,10 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	// Color
 	particle->ColorBegin = properties.ColorBegin;
 	particle->ColorEnd = properties.ColorEnd;
+
+	particle->currentColor.x = properties.ColorBegin.x;
+	particle->currentColor.y = properties.ColorBegin.y;
+	particle->currentColor.z = properties.ColorBegin.z;
 
 	particle->LifeTime = properties.LifeTime;
 	particle->LifeRemaining = properties.LifeTime;

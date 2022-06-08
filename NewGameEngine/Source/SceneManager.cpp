@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "ObjectFactory.h"
+#include "Common/Random.h"
 
 
 SceneManager::SceneManager()
@@ -72,8 +73,9 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 
 	prop.LifeTime = 3.5f;
 	prop.Position = ps.getPos();
-	prop.SizeBegin = 0.4f;
-	prop.SizeEnd = 0.1f;
+
+	
+	
 	prop.SizeVariation = 0.3f;
 
 
@@ -83,32 +85,37 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 		Velocity.x = 0.1f * musParams[0];
 		Velocity.y = 0.1f * musParams[1];
 		Velocity.z = 0.1f * musParams[2];
+		prop.SizeBegin = 0.4f * musParams[0];
 	}
 	if (feature == "bass") {
 		Velocity.x = 0.1f * musParams[0];
 		Velocity.y = 0.1f * musParams[0];
 		Velocity.z = 0.1f * musParams[0];
+		prop.SizeBegin = 0.4f * musParams[0];
 	}
 	if (feature == "mid") {
 		Velocity.x = 0.1f * musParams[1];
 		Velocity.y = 0.1f * musParams[1];
 		Velocity.z = 0.1f * musParams[1];
+		prop.SizeBegin = 0.4f * musParams[1];
 	}
 	if (feature == "treble") {
 		Velocity.x = 0.1f * musParams[2];
 		Velocity.y = 0.1f * musParams[2];
 		Velocity.z = 0.1f * musParams[2];
+		prop.SizeBegin = 0.4f * musParams[2];
 	}
 
+	prop.SizeEnd = 0.1f;
 
 	prop.Velocity = Velocity;
 
 
 	DirectX::XMFLOAT3 VelocityVariation;
 
-	VelocityVariation.x = 0.2f;
-	VelocityVariation.y = 0.2f;
-	VelocityVariation.z = 0.2f;
+	VelocityVariation.x = 0.1f;
+	VelocityVariation.y = 0.1f;
+	VelocityVariation.z = 0.1f;
 
 	prop.VelocityVariation = VelocityVariation;
 	ps.Emit(prop);

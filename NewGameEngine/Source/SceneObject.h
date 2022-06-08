@@ -33,9 +33,10 @@ private:
 protected:
 	std::string vs, ps, gs;
 	bool active;
-	float initPos[3];
+	DirectX::XMFLOAT3 initPos;
 	DirectX::XMFLOAT3 pos;											// position of the object
 	DirectX::XMFLOAT3 size;											// position of the object
+	//DirectX::XMFLOAT3 initSize;											// position of the object
 	
 	std::vector<std::shared_ptr<Drawable>> meshes;
 };
