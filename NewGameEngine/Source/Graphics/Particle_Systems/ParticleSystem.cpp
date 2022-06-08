@@ -3,7 +3,7 @@
 #include "../../ObjectFactory.h"
 
 
-ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, float pos[3], const char* gs)
+ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
 	:
 	//SceneObject(gfx, vs, ps, pos, gs),
 	velocity(Velocity),
@@ -13,18 +13,19 @@ ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, Direct
 	sizeBegin(SizeBegin),
 	sizeEnd(SizeEnd),
 	sizeVariation(SizeVariation),
-	lifeTime(LifeTime)
+	lifeTime(LifeTime),
+	pos(pos)
 {
 	for (int i = 1; i <= 1000; i++) {
-		auto particle = std::make_shared<ParticleWrapper>(gfx, 1.0f, 12, 24, vs, ps, gs);
+		auto particle = std::make_shared<ParticleWrapper>(gfx, 1.0f, 12, 24, vs, ps, pos, gs);
 		ObjectFactory::getInstance().getOM()->AddObject(particle);
 		//particle->SetSize();
 		this->particles.push_back(std::move(particle));
 	}
 	this->active = true;
-	this->pos.x = pos[0];
-	this->pos.y = pos[1];
-	this->pos.z = pos[2];
+	
+	
+	
 
 }
 
@@ -55,9 +56,9 @@ void ParticleSystem::Update(float musParams[3], float timeFrame) const
 
 
 
-				particle->velocity.x += (particle->velocity.x > 0) ? timeFrame * 0.1f : -timeFrame * 0.1f;
-				particle->velocity.y += (particle->velocity.y > 0) ? timeFrame * 0.1f : -timeFrame * 0.1f;
-				particle->velocity.z += (particle->velocity.z > 0) ? timeFrame * 0.1f : -timeFrame * 0.1f;
+				particle->velocity.x += (particle->velocity.x > 0) ? timeFrame : -timeFrame;
+				particle->velocity.y += (particle->velocity.y > 0) ? timeFrame : -timeFrame;
+				particle->velocity.z += (particle->velocity.z > 0) ? timeFrame : -timeFrame;
 				//
 				particle->pos.x += particle->velocity.x;
 				particle->pos.y += particle->velocity.y;

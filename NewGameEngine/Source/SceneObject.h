@@ -11,7 +11,7 @@
 class SceneObject
 {
 public:
-	SceneObject(Graphics& gfx, const char* vs, const char* ps, float pos[3], const char* gs = nullptr);
+	SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr);
 	virtual ~SceneObject();
 	virtual void Reset() ;
 	virtual void Draw(Graphics& gfx) const ;

@@ -1,7 +1,7 @@
 #include "ParticleWrapper.h"
 #include "Particle.h"
 
-ParticleWrapper::ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps,  float pos[3], const char* gs)
+ParticleWrapper::ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps,  DirectX::XMFLOAT3 pos, const char* gs)
 	:
 	SceneObject(gfx, vs, ps, pos, gs),
 	cbuf(gfx),

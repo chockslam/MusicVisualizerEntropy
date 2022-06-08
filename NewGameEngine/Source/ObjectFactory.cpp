@@ -17,7 +17,7 @@ void ObjectFactory::SetUpLevelManager()
 	}
 }
 
-void ObjectFactory::AddSphere(Graphics& gfx, float pos[3], float radius, float latDiv, float longDiv, const char* vs, const char* ps, const char* gs)
+void ObjectFactory::AddSphere(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius, float latDiv, float longDiv, const char* vs, const char* ps, const char* gs)
 {
 	if (this->om) {
 		this->om->AddObject(
@@ -33,7 +33,7 @@ void ObjectFactory::AddSphere(Graphics& gfx, float pos[3], float radius, float l
 	}
 }
 
-void ObjectFactory::AddParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, float pos[3], const char* gs)
+void ObjectFactory::AddParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
 {
 	
 	//if (this->om) {

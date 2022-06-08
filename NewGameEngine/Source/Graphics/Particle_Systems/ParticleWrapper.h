@@ -4,7 +4,7 @@ class ParticleWrapper : public SceneObject
 {
 	friend class ParticleSystem;
 public:
-	ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, float pos[3], const char* gs = nullptr);
+	ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr);
 	void Reset();
 	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const;
 	

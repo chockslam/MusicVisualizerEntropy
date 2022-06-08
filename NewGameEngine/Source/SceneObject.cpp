@@ -1,6 +1,6 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, float pos[3], const char* gs)
+SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
 {
 	this->vs.append(vs);
 
@@ -9,15 +9,11 @@ SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, float po
 
 	this->ps.append(ps);
 
-	this->initPos[0] = pos[0];
-	this->initPos[1] = pos[1];
-	this->initPos[2] = pos[2];
+	this->initPos[0] = pos.x;
+	this->initPos[1] = pos.y;
+	this->initPos[2] = pos.z;
 
 	Reset();
-	if (pos) {
-		delete[] pos;
-	}
-	pos = nullptr;
 
 }
 
