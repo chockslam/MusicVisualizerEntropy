@@ -17,6 +17,7 @@ public:
 	virtual DirectX::XMMATRIX GetTransformXM() const  = 0;				// Transformation matrix of the object. Used by TransformCBuf object.
 	virtual void Draw(Graphics& gfx) const ;									// Draw Object -> executed every frame.
 	void SetPos(DirectX::XMFLOAT3 pos) { this->pos = pos; };
+	void SetSize(DirectX::XMFLOAT3 size) { this->size = size; };
 	virtual ~Drawable() = default;
 	template<class T>															// Query Bindable object from the vector of bindables. Need to modify resources in runtime. Not Used in the program.
 	T* QueryBindable() 
@@ -34,6 +35,7 @@ public:
 	bool isActive() { return this->active; };
 	void activate() { this->active = true; };
 	void deactivate() { this->active = false; };
+	
 protected:
 	void AddBind(std::shared_ptr<Bindable> bind) ;						// Add Bindable to the vector of bindables
 	DirectX::XMFLOAT3 pos = { 1.0f,1.0f,1.0f };

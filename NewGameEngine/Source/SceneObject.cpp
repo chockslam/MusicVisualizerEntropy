@@ -1,6 +1,6 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, float pos[3], const char* gs)
+SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
 {
 	this->vs.append(vs);
 
@@ -9,15 +9,11 @@ SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, float po
 
 	this->ps.append(ps);
 
-	this->initPos[0] = pos[0];
-	this->initPos[1] = pos[1];
-	this->initPos[2] = pos[2];
+	this->initPos[0] = pos.x;
+	this->initPos[1] = pos.y;
+	this->initPos[2] = pos.z;
 
 	Reset();
-	if (pos) {
-		delete[] pos;
-	}
-	pos = nullptr;
 
 }
 
@@ -41,6 +37,7 @@ void SceneObject::Draw(Graphics& gfx) const
 	if (this->active) {
 		for (auto& mesh : this->meshes) {
 			mesh->SetPos(this->pos);
+			mesh->SetSize(this->size);
 			mesh->Draw(gfx);
 		}
 	}
@@ -54,6 +51,40 @@ void SceneObject::deactivate()
 void SceneObject::activate()
 {
 	this->active = true;
+}
+
+void SceneObject::SetPos(DirectX::XMFLOAT3 pos)
+{
+	this->pos = pos;
+}
+
+void SceneObject::SetSize(DirectX::XMFLOAT3 size)
+{
+	this->size = size;
+}
+
+void SceneObject::adjustSize(DirectX::XMFLOAT3 dSize)
+{
+	this->size.x += dSize.x;
+	this->size.y += dSize.y;
+	this->size.z += dSize.z;
+}
+
+void SceneObject::adjustPosition(DirectX::XMFLOAT3 dPos)
+{
+	this->pos.x += dPos.x;
+	this->pos.y += dPos.y;
+	this->pos.z += dPos.z;
+}
+
+DirectX::XMFLOAT3 SceneObject::GetPos()
+{
+	return this->pos;
+}
+
+ DirectX::XMFLOAT3 SceneObject::GetSize()
+{
+	return this->size;
 }
 
 

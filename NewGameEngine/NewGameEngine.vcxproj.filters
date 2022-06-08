@@ -182,13 +182,19 @@
     <ClCompile Include="Source\Common\Random.cpp">
       <Filter>Source Files\Common\Private</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Drawable\Particle.cpp">
-      <Filter>Source Files\Graphics\Private</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Common\Timer.cpp">
       <Filter>Source Files\Common\Classes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\ChiliCamera.cpp">
+      <Filter>Source Files\Graphics\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Particle_Systems\Particle.cpp">
+      <Filter>Source Files\Graphics\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Particle_Systems\ParticleSystem.cpp">
+      <Filter>Source Files\Graphics\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Particle_Systems\ParticleWrapper.cpp">
       <Filter>Source Files\Graphics\Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -364,9 +370,6 @@
     <ClInclude Include="Source\Common\Random.h">
       <Filter>Source Files\Common\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Drawable\Particle.h">
-      <Filter>Source Files\Graphics\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
     <ClInclude Include="Source\Graphics\Vertex.h">
       <Filter>Source Files\Graphics\Public</Filter>
@@ -380,6 +383,16 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
     <ClInclude Include="Source\Graphics\ChiliCamera.h">
+      <Filter>Source Files\Graphics\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Graphics\Particle_Systems\Particle.h">
+      <Filter>Source Files\Graphics\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Particle_Systems\ParticleSystem.h">
+      <Filter>Source Files\Graphics\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Particle_Systems\ParticleWrapper.h">
       <Filter>Source Files\Graphics\Classes</Filter>
     </ClInclude>
   </ItemGroup>
