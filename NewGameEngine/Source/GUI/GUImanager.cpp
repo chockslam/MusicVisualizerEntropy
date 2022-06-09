@@ -52,7 +52,7 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 
 void GUImanager::Start(ChiliCamera& cam)
 {
-	//this->ViewOne(cam); // Start with the first view.
+	this->ViewOne(cam); // Start with the first view.
 
 	// Play Default Audio when program is started.
 	if (AudioIO::getInstance().OpenFile(WAV_FILE)) {
@@ -101,13 +101,13 @@ void GUImanager::HandleViews(Keyboard& kbd, ChiliCamera& cam)
 		this->ViewOne(cam);
 	}
 	else
-		if (kbd.KeyIsPressed('2')) {
-			this->ViewTwo(cam);
-		}
-		else
-		if (kbd.KeyIsPressed('3')) {
-				this->ViewThree(cam);
-		}
+	if (kbd.KeyIsPressed('2')) {
+		this->ViewTwo(cam);
+	}
+	else
+	if (kbd.KeyIsPressed('3')) {
+		this->ViewThree(cam);
+	}
 }
 
 void GUImanager::ViewOne(ChiliCamera& cam)

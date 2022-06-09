@@ -24,8 +24,8 @@ private:
 	mutable PixelConstantBuffer<ParticleCBuf> cbuf;							// Pixel Constant buffer that uses structure declared above as a data.
 	mutable GeometryConstantBuffer<ParticleCBuf> cbufG;			// Geometry Constant buffer that uses structure declared above as a data.
 
-
 	DirectX::XMFLOAT3 velocity;
+	DirectX::XMFLOAT3 friction;
 	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
 
 	DirectX::XMFLOAT3 currentColor;
@@ -36,4 +36,5 @@ private:
 	float LifeRemaining = 0.0f;
 
 	float rotation;
+
 };

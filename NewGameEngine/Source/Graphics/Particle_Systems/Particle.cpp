@@ -75,6 +75,7 @@ DirectX::XMMATRIX Particle::GetTransformXM() const
 {
 	auto transform =
 		DirectX::XMMatrixIdentity() *
+		DirectX::XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z) *
 		DirectX::XMMatrixScaling(this->size.x, this->size.y, this->size.z) *
 		DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
 		

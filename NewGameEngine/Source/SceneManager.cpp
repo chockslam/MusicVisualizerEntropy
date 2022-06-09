@@ -42,7 +42,7 @@ void SceneManager::Update(float musParams[3], float timeFrame)
 		this->EmitParticles(musParams,*testPS1, "bass");
 		this->EmitParticles(musParams,*testPS2, "mid");
 		this->EmitParticles(musParams,*testPS3, "treble");
-		this->kdTimeForParticles = 0.01f;
+		this->kdTimeForParticles = 0.02f;
 	}
 	this->kdTimeForParticles -= timeFrame;
 	
@@ -50,6 +50,17 @@ void SceneManager::Update(float musParams[3], float timeFrame)
 
 void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::string feature )
 {
+	DirectX::XMVECTOR mParams{ musParams[0], musParams[1],musParams[2] };
+	mParams = DirectX::XMVector3Normalize(mParams);
+	DirectX::XMFLOAT3 storedParams;
+	DirectX::XMStoreFloat3(&storedParams, mParams);
+	musParams[0] = storedParams.x*2;
+	musParams[1] = storedParams.y*2;
+	musParams[2] = storedParams.z*2;
+	
+
+
+
 	ParticleProps prop;
 
 	DirectX::XMFLOAT4 colorB;
@@ -74,48 +85,47 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 	prop.LifeTime = 3.5f;
 	prop.Position = ps.getPos();
 
-	
-	
+
 	prop.SizeVariation = 0.3f;
 
 
 	DirectX::XMFLOAT3 Velocity;
 
 	if (feature == "All") {
-		Velocity.x = 0.1f * musParams[0];
-		Velocity.y = 0.1f * musParams[1];
-		Velocity.z = 0.1f * musParams[2];
-		prop.SizeBegin = 0.4f * musParams[0];
+		Velocity.x = 1.0f * musParams[0];
+		Velocity.y = 1.0f * musParams[1];
+		Velocity.z = 1.0f * musParams[2];
 	}
 	if (feature == "bass") {
-		Velocity.x = 0.1f * musParams[0];
-		Velocity.y = 0.1f * musParams[0];
-		Velocity.z = 0.1f * musParams[0];
+		Velocity.x = 5.0f * musParams[0];
+		Velocity.y = 5.0f * musParams[0];
+		Velocity.z = 5.0f * musParams[0];
 		prop.SizeBegin = 0.4f * musParams[0];
 	}
 	if (feature == "mid") {
-		Velocity.x = 0.1f * musParams[1];
-		Velocity.y = 0.1f * musParams[1];
-		Velocity.z = 0.1f * musParams[1];
+		Velocity.x = 5.0f * musParams[1];
+		Velocity.y = 5.0f * musParams[1];
+		Velocity.z = 5.0f * musParams[1];
 		prop.SizeBegin = 0.4f * musParams[1];
 	}
 	if (feature == "treble") {
-		Velocity.x = 0.1f * musParams[2];
-		Velocity.y = 0.1f * musParams[2];
-		Velocity.z = 0.1f * musParams[2];
+		Velocity.x = 5.0f * musParams[2];
+		Velocity.y = 5.0f * musParams[2];
+		Velocity.z = 5.0f * musParams[2];
 		prop.SizeBegin = 0.4f * musParams[2];
 	}
 
-	prop.SizeEnd = 0.1f;
+
+	prop.SizeEnd = 0.01f;
 
 	prop.Velocity = Velocity;
 
 
 	DirectX::XMFLOAT3 VelocityVariation;
 
-	VelocityVariation.x = 0.1f;
-	VelocityVariation.y = 0.1f;
-	VelocityVariation.z = 0.1f;
+	VelocityVariation.x = 1.0f;
+	VelocityVariation.y = 1.0f;
+	VelocityVariation.z = 1.0f;
 
 	prop.VelocityVariation = VelocityVariation;
 	ps.Emit(prop);
@@ -124,8 +134,8 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 void SceneManager::AddParticleSystem(Graphics& gfx)
 {
 	testPS1 =  std::make_shared<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", DirectX::XMFLOAT3{ -50.0f, -5.0f, 10.0f });
-	testPS2 =  std::make_shared<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", DirectX::XMFLOAT3{ -30.0f, -5.0f, 10.0f });
-	testPS3 =  std::make_shared<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", DirectX::XMFLOAT3{ -10.0f, -5.0f, 10.0f });
+	testPS2 =  std::make_shared<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", DirectX::XMFLOAT3{ -40.0f, -5.0f, 10.0f });
+	testPS3 =  std::make_shared<ParticleSystem>(gfx, DirectX::XMFLOAT3{ 0.000005f,0.00005f,0.00005f }, DirectX::XMFLOAT3{ 0.000005f, 0.000005f, 0.000005f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, DirectX::XMFLOAT4{ 255.0f,255.0f ,255.0f ,255.0f }, 0.5f, 0.1f, 1.5f, 1.0f, "SolidVS.cso", "Solid_RGBeqBTM_PS.cso", DirectX::XMFLOAT3{ -30.0f, -5.0f, 10.0f });
 }
 
 void SceneManager::makeGeometrySphere(Graphics& gfx)

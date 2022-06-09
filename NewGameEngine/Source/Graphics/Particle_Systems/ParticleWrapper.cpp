@@ -61,7 +61,11 @@ void ParticleWrapper::_Reset()
 	};
 
 
-	this->currentColor.x = ColorBegin.x;
-	this->currentColor.y = ColorBegin.y;
-	this->currentColor.z = ColorBegin.z;
+	this->currentColor.x = this->ColorBegin.x;
+	this->currentColor.y = this->ColorBegin.y;
+	this->currentColor.z = this->ColorBegin.z;
+
+	this->size.x = this->SizeBegin;
+	this->size.y = this->SizeBegin;
+	this->size.z = this->SizeBegin;
 }

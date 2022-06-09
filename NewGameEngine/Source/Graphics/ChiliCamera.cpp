@@ -35,7 +35,7 @@ void ChiliCamera::Reset()
 void ChiliCamera::Rotate(float dx, float dy)
 {
 	yaw = wrap_angle(yaw + dx*rotationSpeed);
-	pitch = std::clamp(pitch + dy* rotationSpeed, -PI/2.0f, PI / 2.0f);
+	pitch = std::clamp(pitch + dy * rotationSpeed, 0.995f * -PI / 2.0f, 0.995f * PI / 2.0f);
 }
 
 void ChiliCamera::Translate(DirectX::XMFLOAT3 translation)

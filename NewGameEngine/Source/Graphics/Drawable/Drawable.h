@@ -18,6 +18,7 @@ public:
 	virtual void Draw(Graphics& gfx) const ;									// Draw Object -> executed every frame.
 	void SetPos(DirectX::XMFLOAT3 pos) { this->pos = pos; };
 	void SetSize(DirectX::XMFLOAT3 size) { this->size = size; };
+	void SetRot(DirectX::XMFLOAT3 rot) { this->rot = rot; };
 	virtual ~Drawable() = default;
 	template<class T>															// Query Bindable object from the vector of bindables. Need to modify resources in runtime. Not Used in the program.
 	T* QueryBindable() 
@@ -40,6 +41,7 @@ protected:
 	void AddBind(std::shared_ptr<Bindable> bind) ;						// Add Bindable to the vector of bindables
 	DirectX::XMFLOAT3 pos = { 1.0f,1.0f,1.0f };
 	DirectX::XMFLOAT3 size = {1.0f, 1.0f, 1.0f};
+	DirectX::XMFLOAT3 rot = {1.0f, 1.0f, 1.0f};
 	DirectX::XMFLOAT4X4 transform;
 	bool active;
 private:

@@ -16,8 +16,9 @@ ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, Direct
 	lifeTime(LifeTime),
 	pos(pos)
 {
-	for (int i = 1; i <= 1000; i++) {
+	for (int i = 1; i <= 1000; i++) {;
 		auto particle = std::make_shared<ParticleWrapper>(gfx, 1.0f, 12, 24, vs, ps, pos, gs);
+
 		ObjectFactory::getInstance().getOM()->AddObject(particle);
 		//particle->SetSize();
 		this->particles.push_back(std::move(particle));
@@ -26,14 +27,14 @@ ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, Direct
 	
 	
 	
-
+	this->friction = 1.0f;
 }
 
 //ParticleSystem::ParticleSystem(Graphics& gfx, DirectX::XMFLOAT3 Velocity, DirectX::XMFLOAT3 VelocityVariation, DirectX::XMFLOAT4 ColorBegin, DirectX::XMFLOAT4 ColorEnd, float SizeBegin, float SizeEnd, float SizeVariation, float LifeTime, const char* vs, const char* ps, float pos[3], const char* gs)
 //{
 //}
 
-void ParticleSystem::Update(float musParams[3], float timeFrame) const
+void ParticleSystem:: Update(float musParams[3], float timeFrame) const
 {
 	if (this->active) {
 
@@ -44,35 +45,41 @@ void ParticleSystem::Update(float musParams[3], float timeFrame) const
 			if (typeid(*drawable) == typeid(ParticleWrapper)) {
 				auto particle = std::dynamic_pointer_cast<ParticleWrapper>(drawable);
 
-				if (particle->LifeRemaining <= 0.0f)
+				if (particle->LifeRemaining <= 0.0f		//||
+				//	particle->size.x <= 0.0f			&&
+				//	particle->size.y <= 0.0f			&&
+					//particle->size.z <= 0.0f)
+					)
 				{
 					particle->deactivate();
 					particle->Reset();
 					continue;
 				}
 
-
-
 				particle->LifeRemaining -= timeFrame;
 
-
-
-				particle->velocity.x += (particle->velocity.x > 0) ? timeFrame : -timeFrame;
-				particle->velocity.y += (particle->velocity.y > 0) ? timeFrame : -timeFrame;
-				particle->velocity.z += (particle->velocity.z > 0) ? timeFrame : -timeFrame;
+				particle->velocity.x += timeFrame;
+				particle->velocity.y += timeFrame;
+				particle->velocity.z += timeFrame;
 				//
-				particle->pos.x += particle->velocity.x;
-				particle->pos.y += particle->velocity.y;
-				particle->pos.z += particle->velocity.z;
 
+				DirectX::XMVECTOR vel = DirectX::XMLoadFloat3(&particle->velocity);
+				DirectX::XMVECTOR friction = DirectX::XMVectorScale(vel, timeFrame * (-this->friction));
+				vel = DirectX::XMVectorAdd(vel,friction);
+				DirectX::XMStoreFloat3(&particle->velocity, vel);
+
+				particle->pos.x += particle->velocity.x * timeFrame;
+				particle->pos.y += particle->velocity.y * timeFrame;
+				particle->pos.z += particle->velocity.z * timeFrame;
+				
 
 				float life = particle->LifeRemaining / particle->LifeTime;
 
 				float interpolSize = std::lerp(particle->SizeEnd, particle->SizeBegin, life);
 
-				particle->size.x -= interpolSize * timeFrame;
-				particle->size.y -= interpolSize * timeFrame;
-				particle->size.z -= interpolSize * timeFrame;
+				particle->size.x = interpolSize;
+				particle->size.y = interpolSize;
+				particle->size.z = interpolSize;
 
 
 
@@ -120,9 +127,9 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 
 	// Velocity
 	particle->velocity = properties.Velocity;
-	particle->velocity.x += properties.VelocityVariation.x * (Random::Float() - 0.5f);
-	particle->velocity.y += properties.VelocityVariation.y * (Random::Float() - 0.5f);
-	particle->velocity.z += properties.VelocityVariation.z * (Random::Float() - 0.5f);
+	particle->velocity.x += properties.VelocityVariation.x * (Random::Float() - 0.5f)*10;
+	particle->velocity.y += properties.VelocityVariation.y * (Random::Float() - 0.5f)*10;
+	particle->velocity.z += properties.VelocityVariation.z * (Random::Float() - 0.5f)*10;
 
 	// Color
 	particle->ColorBegin = properties.ColorBegin;
@@ -137,10 +144,11 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	particle->SizeBegin = properties.SizeBegin + properties.SizeVariation * (Random::Float() - 0.5f);
 	particle->SizeEnd = properties.SizeEnd;
 
-
 	particle->size.x = particle->SizeBegin;
 	particle->size.y = particle->SizeBegin;
 	particle->size.z = particle->SizeBegin;
+
+
 
 	poolIndex = --poolIndex % this->particles.size();
 

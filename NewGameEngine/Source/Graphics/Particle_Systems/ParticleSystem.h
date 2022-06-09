@@ -31,7 +31,6 @@ public:
 
 private:
 
-	
 	DirectX::XMFLOAT3 pos, velocity, velocityVariation;
 	DirectX::XMFLOAT4 colorBegin, colorEnd;
 	float sizeBegin, sizeEnd, sizeVariation;
@@ -39,7 +38,7 @@ private:
 	int poolIndex = 999;
 
 	bool active;
-
+	float friction;
 
 	std::vector<std::shared_ptr<ParticleWrapper>> particles;
 
