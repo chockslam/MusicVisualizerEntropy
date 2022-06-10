@@ -17,7 +17,7 @@ private:
 
 	struct ParticleCBuf
 	{
-		alignas(16) DirectX::XMFLOAT3 color;
+		alignas(16) DirectX::XMFLOAT4 color;
 	};
 
 	ParticleCBuf cbData;											// Struct object declared above.
@@ -28,7 +28,7 @@ private:
 	DirectX::XMFLOAT3 friction;
 	DirectX::XMFLOAT4 ColorBegin, ColorEnd;
 
-	DirectX::XMFLOAT3 currentColor;
+	DirectX::XMFLOAT4 currentColor;
 
 	float SizeBegin, SizeEnd;
 

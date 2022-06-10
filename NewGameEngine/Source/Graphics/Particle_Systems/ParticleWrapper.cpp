@@ -26,9 +26,9 @@ void ParticleWrapper::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musPara
 	if (this->active) {
 		auto dataCopy = cbData;
 		//const auto pos = DirectX::XMLoadFloat3(pos);
-		DirectX::XMVECTOR color = { currentColor.x, currentColor.y, currentColor.z };
+		DirectX::XMVECTOR color = { currentColor.x, currentColor.y, currentColor.z, currentColor.w };
 
-		DirectX::XMStoreFloat3(&dataCopy.color, color);
+		DirectX::XMStoreFloat4(&dataCopy.color, color);
 
 		// Update pixel constant buffer amd geometry constant buffer with audio data.
 		cbuf.Update(gfx, dataCopy);
@@ -57,13 +57,14 @@ void ParticleWrapper::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musPara
 void ParticleWrapper::_Reset()
 {
 	this->cbData = {
-		{ 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f,0.0f },
 	};
 
 
 	this->currentColor.x = this->ColorBegin.x;
 	this->currentColor.y = this->ColorBegin.y;
 	this->currentColor.z = this->ColorBegin.z;
+	this->currentColor.w = this->ColorBegin.w;
 
 	this->size.x = this->SizeBegin;
 	this->size.y = this->SizeBegin;

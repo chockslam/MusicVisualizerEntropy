@@ -86,11 +86,13 @@ void ParticleSystem:: Update(float musParams[3], float timeFrame) const
 				float x = std::lerp(particle->ColorEnd.x, particle->ColorBegin.x, life);
 				float y = std::lerp(particle->ColorEnd.y, particle->ColorBegin.y, life);
 				float z = std::lerp(particle->ColorEnd.z, particle->ColorBegin.z, life);
+				float w = std::lerp(particle->ColorEnd.w, particle->ColorBegin.w, life);
 
 
 				particle->currentColor.x = x;
 				particle->currentColor.y = y;
 				particle->currentColor.z = z;
+				particle->currentColor.w = w;
 
 				//DirectX::XMVECTOR currentColor = { particle->currentColor[0], particle->currentColor[1], particle->currentColor[2] };
 				//auto dataCopy = cbData;
@@ -138,6 +140,7 @@ void ParticleSystem::Emit(const ParticleProps& properties)
 	particle->currentColor.x = properties.ColorBegin.x;
 	particle->currentColor.y = properties.ColorBegin.y;
 	particle->currentColor.z = properties.ColorBegin.z;
+	particle->currentColor.w = properties.ColorBegin.w;
 
 	particle->LifeTime = properties.LifeTime;
 	particle->LifeRemaining = properties.LifeTime;

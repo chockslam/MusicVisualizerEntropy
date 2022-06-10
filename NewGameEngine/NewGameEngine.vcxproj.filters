@@ -395,6 +395,7 @@
     <ClInclude Include="Source\Graphics\Particle_Systems\ParticleWrapper.h">
       <Filter>Source Files\Graphics\Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\Graphics\Shaders\VS\SolidVS.hlsl">
@@ -423,6 +424,9 @@
     </FxCompile>
     <FxCompile Include="Source\Graphics\Shaders\GS\PrettyExplodeGS.hlsl">
       <Filter>Source Files\Shaders\GS</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\Graphics\Shaders\PS\ParticleWithAlphaChannel.hlsl">
+      <Filter>Source Files\Shaders\PS</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
