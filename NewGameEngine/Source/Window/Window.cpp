@@ -7,6 +7,8 @@ Window::Window(std::string WindowName,HICON icon, INT width, INT height)
 	Initialize(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU);
 	SetupRawInput();
 	pGfx = std::make_unique<Graphics>(m_Handle);
+	ImGuiIO& io = ImGui::GetIO(); //(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
 
 Window::~Window()

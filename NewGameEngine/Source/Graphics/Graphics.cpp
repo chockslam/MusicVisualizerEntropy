@@ -170,7 +170,7 @@ DirectX::XMMATRIX Graphics::GetCamera() const
 void Graphics::initImgui(HWND hwnd) 
 {
 	// Initialize Imgui.
-	IMGUI_CHECKVERSION();
+	//IMGUI_CHECKVERSION();
 	imgCont = ImGui::CreateContext();
 	impCont = ImPlot::CreateContext();
 	
