@@ -26,7 +26,7 @@ public:
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
-	void EndFrame();														
+	void EndFrame(float red, float green, float blue);
 	void BeginFrame(float red, float green, float blue) ;			// Called every frame in the beginning 	
 	void DrawIndexed(UINT count) ;									// Wrapper around pContext->DrawIndexed().
 	void SetProjection(DirectX::FXMMATRIX proj) ;					

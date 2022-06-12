@@ -25,6 +25,8 @@ public:
 	static std::optional<int> ProcessMessages() ;
 	void EnableCursor();
 	void DisableCursor();
+	int getWidth() { return this->m_Width; };
+	int getHeight() { return this->m_Height; };
 private:
 	void SetupRawInput();		// Set-up Raw mouse input, which needed for "Look - Around" functionality implemented for camera movement. 
 	void HideCursor();			

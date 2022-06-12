@@ -79,7 +79,7 @@ void Application::DoFrame(float timeFrame)
 		this->om->UpdateAll(wnd.Gfx(), cam.GetMatrix(), musParams, timeFrame);
 		this->om->RenderAll(wnd.Gfx());
 	
-	wnd.Gfx().EndFrame();
+	wnd.Gfx().EndFrame(0.07f, 0.0f, 0.12f);
 }
 
 

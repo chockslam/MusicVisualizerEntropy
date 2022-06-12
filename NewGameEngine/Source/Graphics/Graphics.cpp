@@ -4,6 +4,7 @@
 #include <d3dcompiler.h>
 #include <cmath>
 #include <DirectXMath.h>
+#include "../GUI/GUIwrap.h"
 
 #include "../Common/WNDconst.h"
 
@@ -15,6 +16,9 @@ namespace dx = DirectX;
 
 Graphics::Graphics(HWND hWnd)
 {
+
+
+	
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = 0;
 	sd.BufferDesc.Height = 0;
@@ -101,9 +105,9 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
 
+	
 	initImgui(hWnd);
-	
-	
+
 
 }
 
@@ -114,11 +118,17 @@ Graphics::~Graphics()
 	ImPlot::DestroyContext(impCont);
 }
 
-void Graphics::EndFrame()
+void Graphics::EndFrame(float red, float green, float blue)
 {
 	// Render InGui
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+	
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+
 	// Present back buffer to the screen.
 	pSwap->Present(1u, 0u);
 }
@@ -136,6 +146,7 @@ void Graphics::BeginFrame(float red, float green, float blue)
 	const float color[] = { red,green,blue,1.0f };
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
 }
 
 void Graphics::DrawIndexed(UINT count) 
@@ -173,9 +184,14 @@ void Graphics::initImgui(HWND hwnd)
 	//IMGUI_CHECKVERSION();
 	imgCont = ImGui::CreateContext();
 	impCont = ImPlot::CreateContext();
+
+	GUIwrap::getInstance().EnableDocking();
 	
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
+
+
+
 	ImGui::StyleColorsDark();
 }
 

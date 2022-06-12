@@ -8,7 +8,7 @@
 
 GUImanager::GUImanager()
 {
-	
+	//GUIwrap::getInstance().EnableDocking();
 }
 
 void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame)
@@ -24,9 +24,13 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 		this->HandlePauseViaKeyboard(wnd.kbd);
 		this->HandleActivatorsViaKeyboard(wnd.kbd);
 
-		GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
-		GUIwrap::getInstance().DrawSliders(weightOfParams);
-		GUIwrap::getInstance().DrawFileDialog();
+		//GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
+		//GUIwrap::getInstance().DrawSliders(weightOfParams);
+		//GUIwrap::getInstance().DrawFileDialog();
+		//GUIwrap::getInstance().showDemoWindow();
+		bool show = true;
+		GUIwrap::getInstance().CreateDockSpace(&show);
+
 
 		// Play New .wav file if it was chosen from file dialog.
 		if (!GUIwrap::getInstance().getUpdatedWavFile().empty() && GUIwrap::getInstance().getUpdatedWavFile() != wavFileName) {
