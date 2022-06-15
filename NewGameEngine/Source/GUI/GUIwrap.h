@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <d3d11.h>
 class Texture;
 class Graphics;
 class GUIwrap {
@@ -54,6 +55,12 @@ public:
     void EnableDocking();
     void showDemoWindow();
     void CreateDockSpace(bool* p_open);
+    void StartDockSpace(bool* p_open);
+    void ToolBarMenu(bool* p_open);
+    void EndDockSpace();
+    void CreateViewPort();
+    std::shared_ptr<Texture> getFrameBuffer();
+    void setFrameBuffer(ID3D11ShaderResourceView* texView);
 
 private:
     void makeStyle();                                                   // general make style 
@@ -76,5 +83,6 @@ private:
     std::shared_ptr<Texture> BassTexture;
     std::shared_ptr<Texture> MidTexture;
     std::shared_ptr<Texture> TrebleTexture;
+    ID3D11ShaderResourceView* SceneFrameBuffer;
     
 };

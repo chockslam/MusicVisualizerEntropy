@@ -197,6 +197,9 @@
     <ClCompile Include="Source\Graphics\Particle_Systems\ParticleWrapper.cpp">
       <Filter>Source Files\Graphics\Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\RenderTexture.cpp">
+      <Filter>Source Files\Graphics\Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window\SubObject.h">
@@ -396,6 +399,10 @@
       <Filter>Source Files\Graphics\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Graphics\Drawable\IndexedTriangleList.h" />
+    <ClInclude Include="Source\Graphics\RenderTexture.h">
+      <Filter>Source Files\Graphics\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\Graphics\Shaders\VS\SolidVS.hlsl">

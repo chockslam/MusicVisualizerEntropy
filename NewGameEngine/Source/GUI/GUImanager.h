@@ -2,12 +2,13 @@
 #include <string>
 #include "../Window/Window.h"
 #include "../Graphics/ChiliCamera.h"
+#include "../Graphics/Bindable/Texture.h"
 class Graphics;
 class GUImanager {
 public:
 	GUImanager();
 	void Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame);
-	void Start(ChiliCamera& cam);
+	void Start(ChiliCamera& cam, Window& wnd);
 
 	void LoadTextures(Graphics& gfx);
 
@@ -51,6 +52,8 @@ private:
 
 	const DirectX::XMFLOAT2 GS_PS_Rot = { 0.09f, 0.01999f };
 	const DirectX::XMFLOAT2 BothViewRot = { 0.07f,0.44999f };
+	
 
+	std::shared_ptr<Texture> frameBuffer;
 
 };

@@ -94,6 +94,7 @@ public:
 
 	Surface(unsigned long long width, unsigned long long height) ;
 	Surface(Surface&& source) ;
+	Surface() {};
 	Surface(Surface&) = delete;
 	Surface& operator=(Surface&& donor) ;
 	Surface& operator=(const Surface&) = delete;

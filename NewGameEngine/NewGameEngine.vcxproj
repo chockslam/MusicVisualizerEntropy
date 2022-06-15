@@ -117,6 +117,7 @@
     <ClCompile Include="Source\Graphics\Particle_Systems\Particle.cpp" />
     <ClCompile Include="Source\Graphics\Particle_Systems\ParticleSystem.cpp" />
     <ClCompile Include="Source\Graphics\Particle_Systems\ParticleWrapper.cpp" />
+    <ClCompile Include="Source\Graphics\RenderTexture.cpp" />
     <ClCompile Include="Source\Graphics\Surface.cpp" />
     <ClCompile Include="Source\GUI\GUImanager.cpp" />
     <ClCompile Include="Source\GUI\GUIwrap.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Source\Graphics\Particle_Systems\Particle.h" />
     <ClInclude Include="Source\Graphics\Particle_Systems\ParticleSystem.h" />
     <ClInclude Include="Source\Graphics\Particle_Systems\ParticleWrapper.h" />
+    <ClInclude Include="Source\Graphics\RenderTexture.h" />
     <ClInclude Include="Source\Graphics\Surface.h" />
     <ClInclude Include="Source\Graphics\Vertex.h" />
     <ClInclude Include="Source\GUI\GUImanager.h" />

@@ -13,6 +13,7 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 #include <implot.h>
+#include "RenderTexture.h"
 
 
 /// <summary>
@@ -27,9 +28,17 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
 	void EndFrame(float red, float green, float blue);
+	//void BeginGUIFrame(float red, float green, float blue);
+	//void EndGUIFrame();
 	void BeginFrame(float red, float green, float blue) ;			// Called every frame in the beginning 	
+	//bool RenderToTexture();
 	void DrawIndexed(UINT count) ;									// Wrapper around pContext->DrawIndexed().
-	void SetProjection(DirectX::FXMMATRIX proj) ;					
+	void SetProjection(DirectX::FXMMATRIX proj) ;			
+	//void switchToTextureRendering(ID3D11Texture2D* texture );
+	//void switchToWindowRendering( );
+	std::shared_ptr<RenderTexture> getRenderTexture();
+	void switchRenderTargetToTexture( );
+	void switchRenderTargetToWindow( );
 	DirectX::XMMATRIX GetProjection() const ;						
 	void SetCamera(DirectX::FXMMATRIX cam) ;						// Set camera transform.
 	DirectX::XMMATRIX GetCamera() const ;							// Get camera transform.
@@ -42,10 +51,15 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;							// Represents a pointer to ID3D11Device, which is (usually) used to CREATE D3D objects and configure some D3D stuff.
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;							// Swap Chain. Swapping between back buffer and front buffer.
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;					// Context. Used to draw objects and manipulate D3D resources.
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pWindowTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTextureTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
+	ID3D11RenderTargetView** currentTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;					// Stencil view. Used as a Depth Checker, i.e. Z-buffer.
 	ImGuiContext* imgCont;
 	ImPlotContext* impCont;
+	std::shared_ptr<RenderTexture> pRenderTexture;
+
+	bool renderToTexture = false;
 
 
 };

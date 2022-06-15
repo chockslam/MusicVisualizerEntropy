@@ -13,7 +13,7 @@ GUImanager::GUImanager()
 
 void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame)
 {
-	
+	wnd.Gfx().switchRenderTargetToWindow();
 	this->ToggleCursor(wnd);
 
 	this->kdTimer = (this->kdTimer == COOL_DOWN) ? COOL_DOWN : this->kdTimer + 1; // Handle "Cool Down for keyboard shortcuts" functionality.
@@ -28,9 +28,7 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 		//GUIwrap::getInstance().DrawSliders(weightOfParams);
 		//GUIwrap::getInstance().DrawFileDialog();
 		//GUIwrap::getInstance().showDemoWindow();
-		bool show = true;
-		GUIwrap::getInstance().CreateDockSpace(&show);
-
+		
 
 		// Play New .wav file if it was chosen from file dialog.
 		if (!GUIwrap::getInstance().getUpdatedWavFile().empty() && GUIwrap::getInstance().getUpdatedWavFile() != wavFileName) {
@@ -46,16 +44,42 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 				AudioIO::getInstance().PauseAudio();
 			}
 		}
+
+		//wnd.Gfx().switchRenderTargetToTexture();
+	//wnd.Gfx().switchToTextureRendering(frameBuffer->GetTexture2D().Get());
+
+		
 	}
-	else{
+	else {
 		this->ViewIndicator = 0;
 		this->Control(wnd, cam, timeFrame);
+		//wnd.Gfx().switchToWindowRendering();
 	}
+
+	bool show = true;
+	//GUIwrap::getInstance().CreateDockSpace(&show);
+	//wnd.Gfx().switchRenderTargetToWindow();
+	GUIwrap::getInstance().StartDockSpace(&show);
+	GUIwrap::getInstance().ToolBarMenu(&show);
+	GUIwrap::getInstance().CreateViewPort();
+
+	GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
+	GUIwrap::getInstance().DrawSliders(weightOfParams);
+	GUIwrap::getInstance().DrawFileDialog();
+
+	GUIwrap::getInstance().EndDockSpace();
+
+	wnd.Gfx().switchRenderTargetToTexture();
+
 	
 }
 
-void GUImanager::Start(ChiliCamera& cam)
+void GUImanager::Start(ChiliCamera& cam, Window& wnd)
 {
+
+	GUIwrap::getInstance().setFrameBuffer(wnd.Gfx().getRenderTexture()->GetShaderResourceView());
+	//wnd.Gfx().switchToTextureRendering(this->frameBuffer->GetTexture2D().Get());
+	
 	this->ViewOne(cam); // Start with the first view.
 
 	// Play Default Audio when program is started.

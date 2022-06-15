@@ -57,7 +57,7 @@ Graphics::Graphics(HWND hWnd)
 	// gain access to texture subresource in swap chain (back buffer)
 	wrl::ComPtr<ID3D11Resource> pBackBuffer;
 	pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
-	pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget);
+	pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pWindowTarget);
 
 	// create depth stensil state
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -94,7 +94,7 @@ Graphics::Graphics(HWND hWnd)
 	);
 
 	// bind depth stensil view to OM
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
 	// configure viewport
 	D3D11_VIEWPORT vp;
 	vp.Width = W_WIDTH;
@@ -105,7 +105,10 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
 
-	
+	currentTarget = pWindowTarget.GetAddressOf();
+
+	pRenderTexture = std::make_shared<RenderTexture>();
+	pRenderTexture->Initialize(pDevice.Get(), W_WIDTH, W_HEIGHT);
 	initImgui(hWnd);
 
 
@@ -121,33 +124,92 @@ Graphics::~Graphics()
 void Graphics::EndFrame(float red, float green, float blue)
 {
 	// Render InGui
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+	//if (!renderToTexture) {
+		
+	//}
 	
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-	}
 
 	// Present back buffer to the screen.
 	pSwap->Present(1u, 0u);
+
+
+	const float color[] = { red,green,blue,1.0f };
+	pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+
 }
+
+//void Graphics::BeginGUIFrame(float red, float green, float blue)
+//{
+//	// Imgui new frame
+//	const float color[] = { red,green,blue,1.0f };
+//	ImGui_ImplDX11_NewFrame();
+//	ImGui_ImplWin32_NewFrame();
+//	ImGui::NewFrame();
+//
+//	pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
+//	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+//	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+//}
+//
+//void Graphics::EndGUIFrame()
+//{
+//	ImGui::Render();
+//	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+//	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+//
+//		ImGui::UpdatePlatformWindows();
+//		ImGui::RenderPlatformWindowsDefault();
+//	}
+//	pSwap->Present(1u, 0u);
+//}
 
 void Graphics::BeginFrame(float red, float green, float blue) 
 {
 	
-	// Imgui new frame
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
+	//// Imgui new frame
+	//if (!renderToTexture) {
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	//}
 
-
+		const float color[] = { red,green,blue,1.0f };
 	// Reset Render Target View and Dept Stencil View (z-buffer)
-	const float color[] = { red,green,blue,1.0f };
-	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+	
+	//if (!renderToTexture) {
+		pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
+		pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+		//pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+	//}
+	//else {
+		//pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+	//}
 }
+
+//bool Graphics::RenderToTexture()
+//{
+//	bool result;
+//
+//
+//	// Set the render target to be the render to texture.
+//	pRenderTexture->SetRenderTarget(pContext.Get(), pDSV.Get());
+//
+//	// Clear the render to texture.
+//	pRenderTexture->ClearRenderTarget(pContext.Get(), pDSV.Get(), 0.0f, 0.0f, 1.0f, 1.0f);
+//
+//	// Render the scene now and it will draw to the render to texture instead of the back buffer.
+//	result = RenderScene();
+//	if (!result)
+//	{
+//		return false;
+//	}
+//
+//	// Reset the render target back to the original back buffer and not the render to texture anymore.
+//	m_D3D->SetBackBufferRenderTarget();
+//
+//	return true;
+//}
 
 void Graphics::DrawIndexed(UINT count) 
 {
@@ -158,6 +220,57 @@ void Graphics::SetProjection(DirectX::FXMMATRIX proj)
 {
 	projection = proj;					// Set projection matrix.
 }
+
+//void Graphics::switchToTextureRendering(ID3D11Texture2D* texture )
+//{
+//	renderToTexture = true;
+//	if (!pTextureTarget)
+//	{
+//
+//		HRESULT result;
+//		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+//
+//		renderTargetViewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+//		renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+//		renderTargetViewDesc.Texture2D.MipSlice = 0;
+//
+//		pDevice->CreateRenderTargetView(texture, &renderTargetViewDesc, &pTextureTarget);
+//		//	pContext->OMSetRenderTargets(1u, pTextureTarget.GetAddressOf(), pDSV.Get());
+//	}
+//}
+//
+//void Graphics::switchToWindowRendering()
+//{
+//	renderToTexture = false;
+//}
+
+std::shared_ptr<RenderTexture> Graphics::getRenderTexture()
+{
+	return this->pRenderTexture;
+}
+
+void Graphics::switchRenderTargetToTexture()
+{
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+
+	pRenderTexture->SetRenderTarget(pContext.Get(), pDSV.Get());
+	
+	pRenderTexture->ClearRenderTarget(pContext.Get(), pDSV.Get(), 0.07f, 0.0f, 0.12f, 1.0f);
+
+}
+
+void Graphics::switchRenderTargetToWindow()
+{
+	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+}
+
+
 
 DirectX::XMMATRIX Graphics::GetProjection() const 
 {
