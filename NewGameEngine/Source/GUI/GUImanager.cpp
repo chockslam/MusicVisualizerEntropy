@@ -18,17 +18,27 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 
 	this->kdTimer = (this->kdTimer == COOL_DOWN) ? COOL_DOWN : this->kdTimer + 1; // Handle "Cool Down for keyboard shortcuts" functionality.
 	this->AudioWasPlaying = this->AudioIsPlaying;
+
+	bool show = true;
+	//GUIwrap::getInstance().CreateDockSpace(&show);
+	//wnd.Gfx().switchRenderTargetToWindow();
+	GUIwrap::getInstance().StartDockSpace(&show);
+	GUIwrap::getInstance().ToolBarMenu(&show);
+	GUIwrap::getInstance().CreateViewPort();
+
+	GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
+	GUIwrap::getInstance().DrawSliders(weightOfParams);
+	GUIwrap::getInstance().DrawFileDialog();
+
+	GUIwrap::getInstance().EndDockSpace();
+
+
 	if (wnd.CursorEnabled) {
 
 		this->HandleViews(wnd.kbd, cam);
 		this->HandlePauseViaKeyboard(wnd.kbd);
 		this->HandleActivatorsViaKeyboard(wnd.kbd);
 
-		//GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
-		//GUIwrap::getInstance().DrawSliders(weightOfParams);
-		//GUIwrap::getInstance().DrawFileDialog();
-		//GUIwrap::getInstance().showDemoWindow();
-		
 
 		// Play New .wav file if it was chosen from file dialog.
 		if (!GUIwrap::getInstance().getUpdatedWavFile().empty() && GUIwrap::getInstance().getUpdatedWavFile() != wavFileName) {
@@ -45,29 +55,13 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 			}
 		}
 
-		//wnd.Gfx().switchRenderTargetToTexture();
-	//wnd.Gfx().switchToTextureRendering(frameBuffer->GetTexture2D().Get());
-
-		
 	}
 	else {
 		this->ViewIndicator = 0;
 		this->Control(wnd, cam, timeFrame);
-		//wnd.Gfx().switchToWindowRendering();
 	}
 
-	bool show = true;
-	//GUIwrap::getInstance().CreateDockSpace(&show);
-	//wnd.Gfx().switchRenderTargetToWindow();
-	GUIwrap::getInstance().StartDockSpace(&show);
-	GUIwrap::getInstance().ToolBarMenu(&show);
-	GUIwrap::getInstance().CreateViewPort();
 
-	GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
-	GUIwrap::getInstance().DrawSliders(weightOfParams);
-	GUIwrap::getInstance().DrawFileDialog();
-
-	GUIwrap::getInstance().EndDockSpace();
 
 	wnd.Gfx().switchRenderTargetToTexture();
 

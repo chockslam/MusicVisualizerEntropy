@@ -207,7 +207,7 @@ void GUIwrap::DrawFileDialog()
 		}
 
 		// close
-		this->FileDialogActive = false;
+		//this->FileDialogActive = false;
 		ImGuiFileDialog::Instance()->Close();
 	}
 }
@@ -553,7 +553,6 @@ void GUIwrap::CreateViewPort()
 	ImGui::Begin("Scene", nullptr);
 		if(SceneFrameBuffer)
 			ImGui::Image(SceneFrameBuffer, ImVec2(W_WIDTH, W_HEIGHT ));
-	
 	ImGui::End();
 }
 

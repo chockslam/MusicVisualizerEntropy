@@ -123,13 +123,6 @@ Graphics::~Graphics()
 
 void Graphics::EndFrame(float red, float green, float blue)
 {
-	// Render InGui
-	//if (!renderToTexture) {
-		
-	//}
-	
-
-	// Present back buffer to the screen.
 	pSwap->Present(1u, 0u);
 
 
@@ -139,78 +132,17 @@ void Graphics::EndFrame(float red, float green, float blue)
 
 }
 
-//void Graphics::BeginGUIFrame(float red, float green, float blue)
-//{
-//	// Imgui new frame
-//	const float color[] = { red,green,blue,1.0f };
-//	ImGui_ImplDX11_NewFrame();
-//	ImGui_ImplWin32_NewFrame();
-//	ImGui::NewFrame();
-//
-//	pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
-//	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-//	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
-//}
-//
-//void Graphics::EndGUIFrame()
-//{
-//	ImGui::Render();
-//	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-//	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-//
-//		ImGui::UpdatePlatformWindows();
-//		ImGui::RenderPlatformWindowsDefault();
-//	}
-//	pSwap->Present(1u, 0u);
-//}
 
 void Graphics::BeginFrame(float red, float green, float blue) 
 {
 	
-	//// Imgui new frame
-	//if (!renderToTexture) {
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
-	//}
 
 		const float color[] = { red,green,blue,1.0f };
-	// Reset Render Target View and Dept Stencil View (z-buffer)
 	
-	//if (!renderToTexture) {
-		pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
-		pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-		//pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
-	//}
-	//else {
-		//pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
-	//}
 }
-
-//bool Graphics::RenderToTexture()
-//{
-//	bool result;
-//
-//
-//	// Set the render target to be the render to texture.
-//	pRenderTexture->SetRenderTarget(pContext.Get(), pDSV.Get());
-//
-//	// Clear the render to texture.
-//	pRenderTexture->ClearRenderTarget(pContext.Get(), pDSV.Get(), 0.0f, 0.0f, 1.0f, 1.0f);
-//
-//	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-//	result = RenderScene();
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	// Reset the render target back to the original back buffer and not the render to texture anymore.
-//	m_D3D->SetBackBufferRenderTarget();
-//
-//	return true;
-//}
-
 void Graphics::DrawIndexed(UINT count) 
 {
 	pContext->DrawIndexed(count, 0u, 0u);
@@ -220,29 +152,6 @@ void Graphics::SetProjection(DirectX::FXMMATRIX proj)
 {
 	projection = proj;					// Set projection matrix.
 }
-
-//void Graphics::switchToTextureRendering(ID3D11Texture2D* texture )
-//{
-//	renderToTexture = true;
-//	if (!pTextureTarget)
-//	{
-//
-//		HRESULT result;
-//		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-//
-//		renderTargetViewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-//		renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-//		renderTargetViewDesc.Texture2D.MipSlice = 0;
-//
-//		pDevice->CreateRenderTargetView(texture, &renderTargetViewDesc, &pTextureTarget);
-//		//	pContext->OMSetRenderTargets(1u, pTextureTarget.GetAddressOf(), pDSV.Get());
-//	}
-//}
-//
-//void Graphics::switchToWindowRendering()
-//{
-//	renderToTexture = false;
-//}
 
 std::shared_ptr<RenderTexture> Graphics::getRenderTexture()
 {
