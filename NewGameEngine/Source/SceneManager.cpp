@@ -31,9 +31,7 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 
 void SceneManager::Update(float musParams[3], float timeFrame)
 {
-	//if (this->partCount < 100) {
-	//	this->partCount++;
-	
+
 	testPS1->Update(musParams, timeFrame);
 	testPS2->Update(musParams, timeFrame);
 	testPS3->Update(musParams, timeFrame);
@@ -72,9 +70,9 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 
 	DirectX::XMFLOAT4 colorB;
 
-	colorB.x = 128.0f;
-	colorB.y = 164.0f;
-	colorB.z = 0.0f;
+	colorB.x = 0.0f;
+	colorB.y = 128.0f;
+	colorB.z = 128.0f;
 	colorB.w = 1.0f;
 
 
@@ -82,9 +80,9 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 
 	DirectX::XMFLOAT4 colorE;
 
-	colorE.x = 0.0f;
+	colorE.x = 255.0f;
 	colorE.y = 0.0f;
-	colorE.z = 100.0f;
+	colorE.z = 255.0f;
 	colorE.w = 1000.0f;
 
 	prop.ColorEnd = colorE;
@@ -104,21 +102,21 @@ void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::st
 		Velocity.z = 1.0f * musParams[2];
 	}
 	if (feature == "bass") {
-		Velocity.x = 5.0f * musParams[0];
+		Velocity.x = 0.0f;// 5.0f * musParams[0];
 		Velocity.y = 5.0f * musParams[0];
-		Velocity.z = 5.0f * musParams[0];
+		Velocity.z = 0.0f;//5.0f * musParams[0];
 		prop.SizeBegin = 0.4f * musParams[0];
 	}
 	if (feature == "mid") {
-		Velocity.x = 5.0f * musParams[1];
+		Velocity.x = 0.0f;//5.0f * musParams[1];
 		Velocity.y = 5.0f * musParams[1];
-		Velocity.z = 5.0f * musParams[1];
+		Velocity.z = 0.0f;//5.0f * musParams[1];
 		prop.SizeBegin = 0.4f * musParams[1];
 	}
 	if (feature == "treble") {
-		Velocity.x = 5.0f * musParams[2];
+		Velocity.x = 0.0f;// 5.0f * musParams[2];
 		Velocity.y = 5.0f * musParams[2];
-		Velocity.z = 5.0f * musParams[2];
+		Velocity.z = 0.0f;//5.0f * musParams[2];
 		prop.SizeBegin = 0.4f * musParams[2];
 	}
 

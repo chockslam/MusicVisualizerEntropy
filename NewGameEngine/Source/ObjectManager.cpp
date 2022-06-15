@@ -9,13 +9,15 @@ void ObjectManager::AddObject(std::shared_ptr<SceneObject> obj)
 
 void ObjectManager::UpdateAll(Graphics& gfx, DirectX::XMMATRIX viewMatrix, float musParams[3], float timeFrame)
 {
-	
+	//gfx.switchRenderTargetToTexture();
 	for (auto& obj : this->pObjectList) {
 		obj->Bind(gfx, viewMatrix, musParams, timeFrame);
 		obj->Draw(gfx);
 	}
 	if (sm)
 		sm->Update(musParams,timeFrame);
+
+	//gfx.switchRenderTargetToWindow();
 }
 
 void ObjectManager::RenderAll(Graphics& gfx)

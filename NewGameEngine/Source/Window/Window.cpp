@@ -1,9 +1,11 @@
 /// CODE was written with help by OlympusMonsTutorial (https://www.youtube.com/c/OlympusMonsTutorials) and ChiliTomatoNoodle (https://www.youtube.com/c/ChiliTomatoNoodle)
 
 #include "Window.h"
+#include "../GUI/GUIwrap.h"
 Window::Window(std::string WindowName,HICON icon, INT width, INT height)
 	: SubObject("EngineContainer", WindowName, icon), m_Width(width), m_Height(height)
 {
+
 	Initialize(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU);
 	SetupRawInput();
 	pGfx = std::make_unique<Graphics>(m_Handle);

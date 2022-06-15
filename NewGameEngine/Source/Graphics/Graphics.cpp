@@ -4,6 +4,7 @@
 #include <d3dcompiler.h>
 #include <cmath>
 #include <DirectXMath.h>
+#include "../GUI/GUIwrap.h"
 
 #include "../Common/WNDconst.h"
 
@@ -15,6 +16,9 @@ namespace dx = DirectX;
 
 Graphics::Graphics(HWND hWnd)
 {
+
+
+	
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = 0;
 	sd.BufferDesc.Height = 0;
@@ -53,7 +57,7 @@ Graphics::Graphics(HWND hWnd)
 	// gain access to texture subresource in swap chain (back buffer)
 	wrl::ComPtr<ID3D11Resource> pBackBuffer;
 	pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
-	pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget);
+	pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pWindowTarget);
 
 	// create depth stensil state
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -90,7 +94,7 @@ Graphics::Graphics(HWND hWnd)
 	);
 
 	// bind depth stensil view to OM
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
 	// configure viewport
 	D3D11_VIEWPORT vp;
 	vp.Width = W_WIDTH;
@@ -101,9 +105,12 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
 
+	currentTarget = pWindowTarget.GetAddressOf();
+
+	pRenderTexture = std::make_shared<RenderTexture>();
+	pRenderTexture->Initialize(pDevice.Get(), W_WIDTH, W_HEIGHT);
 	initImgui(hWnd);
-	
-	
+
 
 }
 
@@ -114,30 +121,28 @@ Graphics::~Graphics()
 	ImPlot::DestroyContext(impCont);
 }
 
-void Graphics::EndFrame()
+void Graphics::EndFrame(float red, float green, float blue)
 {
-	// Render InGui
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	// Present back buffer to the screen.
 	pSwap->Present(1u, 0u);
+
+
+	const float color[] = { red,green,blue,1.0f };
+	pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+
 }
+
 
 void Graphics::BeginFrame(float red, float green, float blue) 
 {
 	
-	// Imgui new frame
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
 
-
-	// Reset Render Target View and Dept Stencil View (z-buffer)
-	const float color[] = { red,green,blue,1.0f };
-	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+		const float color[] = { red,green,blue,1.0f };
+	
 }
-
 void Graphics::DrawIndexed(UINT count) 
 {
 	pContext->DrawIndexed(count, 0u, 0u);
@@ -147,6 +152,34 @@ void Graphics::SetProjection(DirectX::FXMMATRIX proj)
 {
 	projection = proj;					// Set projection matrix.
 }
+
+std::shared_ptr<RenderTexture> Graphics::getRenderTexture()
+{
+	return this->pRenderTexture;
+}
+
+void Graphics::switchRenderTargetToTexture()
+{
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+
+	pRenderTexture->SetRenderTarget(pContext.Get(), pDSV.Get());
+	
+	pRenderTexture->ClearRenderTarget(pContext.Get(), pDSV.Get(), 0.07f, 0.0f, 0.12f, 1.0f);
+
+}
+
+void Graphics::switchRenderTargetToWindow()
+{
+	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+}
+
+
 
 DirectX::XMMATRIX Graphics::GetProjection() const 
 {
@@ -170,12 +203,17 @@ DirectX::XMMATRIX Graphics::GetCamera() const
 void Graphics::initImgui(HWND hwnd) 
 {
 	// Initialize Imgui.
-	IMGUI_CHECKVERSION();
+	//IMGUI_CHECKVERSION();
 	imgCont = ImGui::CreateContext();
 	impCont = ImPlot::CreateContext();
+
+	GUIwrap::getInstance().EnableDocking();
 	
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
+
+
+
 	ImGui::StyleColorsDark();
 }
 
