@@ -59,7 +59,7 @@ public:
     void ToolBarMenu(bool* p_open);
     void EndDockSpace();
     void CreateViewPort();
-    std::shared_ptr<Texture> getFrameBuffer();
+    void resizeImGuiViewport();
     void setFrameBuffer(ID3D11ShaderResourceView* texView);
 
 private:

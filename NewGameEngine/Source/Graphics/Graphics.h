@@ -28,17 +28,13 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
 	void EndFrame(float red, float green, float blue);
-	//void BeginGUIFrame(float red, float green, float blue);
-	//void EndGUIFrame();
 	void BeginFrame(float red, float green, float blue) ;			// Called every frame in the beginning 	
-	//bool RenderToTexture();
 	void DrawIndexed(UINT count) ;									// Wrapper around pContext->DrawIndexed().
-	void SetProjection(DirectX::FXMMATRIX proj) ;			
-	//void switchToTextureRendering(ID3D11Texture2D* texture );
-	//void switchToWindowRendering( );
+	void SetProjection(DirectX::FXMMATRIX proj) ;
 	std::shared_ptr<RenderTexture> getRenderTexture();
 	void switchRenderTargetToTexture( );
 	void switchRenderTargetToWindow( );
+	void ResizeImgui(float width, float height);
 	DirectX::XMMATRIX GetProjection() const ;						
 	void SetCamera(DirectX::FXMMATRIX cam) ;						// Set camera transform.
 	DirectX::XMMATRIX GetCamera() const ;							// Get camera transform.
@@ -55,9 +51,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTextureTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
 	ID3D11RenderTargetView** currentTarget;					// Target. Targets a specific platform. Windows in the case of this implememtaion.
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;					// Stencil view. Used as a Depth Checker, i.e. Z-buffer.
+	D3D11_VIEWPORT vpWindow;
+	D3D11_VIEWPORT vpRenderTexture;
 	ImGuiContext* imgCont;
 	ImPlotContext* impCont;
 	std::shared_ptr<RenderTexture> pRenderTexture;
+
 
 	bool renderToTexture = false;
 

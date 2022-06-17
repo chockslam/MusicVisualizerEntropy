@@ -73,8 +73,8 @@ Graphics::Graphics(HWND hWnd)
 	// create depth stensil texture
 	wrl::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = W_WIDTH;
-	descDepth.Height = W_HEIGHT;
+	descDepth.Width = S_WIDTH;
+	descDepth.Height = S_HEIGHT;
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -96,19 +96,26 @@ Graphics::Graphics(HWND hWnd)
 	// bind depth stensil view to OM
 	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
 	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = W_WIDTH;
-	vp.Height = W_HEIGHT;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
-	pContext->RSSetViewports(1u, &vp);
+	
+	vpWindow.Width = W_WIDTH;
+	vpWindow.Height = W_HEIGHT;
+	vpWindow.MinDepth = 0.0f;
+	vpWindow.MaxDepth = 1.0f;
+	vpWindow.TopLeftX = 0.0f;
+	vpWindow.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vpWindow);
+
+	vpRenderTexture.Width = S_WIDTH;
+	vpRenderTexture.Height = S_HEIGHT;
+	vpRenderTexture.MinDepth = 0.0f;
+	vpRenderTexture.MaxDepth = 1.0f;
+	vpRenderTexture.TopLeftX = 0.0f;
+	vpRenderTexture.TopLeftY = 0.0f;
 
 	currentTarget = pWindowTarget.GetAddressOf();
 
 	pRenderTexture = std::make_shared<RenderTexture>();
-	pRenderTexture->Initialize(pDevice.Get(), W_WIDTH, W_HEIGHT);
+	pRenderTexture->Initialize(pDevice.Get(), S_WIDTH, S_HEIGHT);
 	initImgui(hWnd);
 
 
@@ -125,7 +132,7 @@ void Graphics::EndFrame(float red, float green, float blue)
 {
 	pSwap->Present(1u, 0u);
 
-
+	
 	const float color[] = { red,green,blue,1.0f };
 	pContext->ClearRenderTargetView(pWindowTarget.Get(), color);
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
@@ -160,6 +167,7 @@ std::shared_ptr<RenderTexture> Graphics::getRenderTexture()
 
 void Graphics::switchRenderTargetToTexture()
 {
+	//ImVec2 view = ImGui::GetContentRegionAvail();
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -167,6 +175,8 @@ void Graphics::switchRenderTargetToTexture()
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 	}
+
+	pContext->RSSetViewports(1u, &vpRenderTexture);
 
 	pRenderTexture->SetRenderTarget(pContext.Get(), pDSV.Get());
 	
@@ -176,7 +186,38 @@ void Graphics::switchRenderTargetToTexture()
 
 void Graphics::switchRenderTargetToWindow()
 {
+	pContext->RSSetViewports(1u, &vpWindow);
 	pContext->OMSetRenderTargets(1u, pWindowTarget.GetAddressOf(), pDSV.Get());
+	
+}
+
+void Graphics::ResizeImgui(float width, float height)
+{
+	pContext->OMSetRenderTargets(0, 0, 0);
+	//pWindowTarget->Release();
+	pSwap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+	wrl::ComPtr<ID3D11Resource> pBackBuffer;
+	pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
+	
+	pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL,
+		&pWindowTarget);
+	pContext->OMSetRenderTargets(1, pWindowTarget.GetAddressOf(), pDSV.Get());
+	
+	//D3D11_VIEWPORT vp;
+	vpWindow.Width = width;
+	vpWindow.Height = height;
+	vpWindow.MinDepth = 0.0f;
+	vpWindow.MaxDepth = 1.0f;
+	vpWindow.TopLeftX = 0;
+	vpWindow.TopLeftY = 0;
+	
+	//for (const auto& viewport : ImGui::GetCurrentContext()->Viewports)
+	//{
+	//	ImGui::ScaleWindowsInViewport(viewport, relative_scale_reset);
+	//}
+
+	//auto testSize = ImGui::GetWindowSize();
+	pContext->RSSetViewports(1, &vpWindow);
 }
 
 

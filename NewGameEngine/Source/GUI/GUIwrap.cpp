@@ -509,7 +509,7 @@ void GUIwrap::StartDockSpace(bool* p_open)
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		ImGui::DockSpace(dockspace_id, ImGui::GetMainViewport()->WorkSize, dockspace_flags);
 	}
 	else
 	{
@@ -528,16 +528,6 @@ void GUIwrap::ToolBarMenu(bool* p_open)
 				*p_open = false;
 			ImGui::EndMenu();
 		}
-		//HelpMarker(
-		//	"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
-		//	"- Drag from window title bar or their tab to dock/undock." "\n"
-		//	"- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
-		//	"- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)" "\n"
-		//	"- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)" "\n"
-		//	"This demo app has nothing to do with enabling docking!" "\n\n"
-		//	"This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window." "\n\n"
-		//	"Read comments in ShowExampleAppDockSpace() for more details.");
-
 		ImGui::EndMenuBar();
 	}
 }
@@ -550,10 +540,16 @@ void GUIwrap::EndDockSpace()
 
 void GUIwrap::CreateViewPort()
 {
-	ImGui::Begin("Scene", nullptr);
+	ImGui::Begin("Scene_1", nullptr);
 		if(SceneFrameBuffer)
-			ImGui::Image(SceneFrameBuffer, ImVec2(W_WIDTH, W_HEIGHT ));
+			ImGui::Image(SceneFrameBuffer, ImVec2(S_WIDTH, S_HEIGHT));
 	ImGui::End();
+}
+
+void GUIwrap::resizeImGuiViewport()
+{
+	
+
 }
 
 //std::shared_ptr<Texture> GUIwrap::getFrameBuffer()

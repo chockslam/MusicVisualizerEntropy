@@ -24,12 +24,12 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 	//wnd.Gfx().switchRenderTargetToWindow();
 	GUIwrap::getInstance().StartDockSpace(&show);
 	GUIwrap::getInstance().ToolBarMenu(&show);
-	GUIwrap::getInstance().CreateViewPort();
+	
 
 	GUIwrap::getInstance().DrawStatusBar(musParams, AudioIsPlaying, ViewIndicator, true, true, true, false, true);
 	GUIwrap::getInstance().DrawSliders(weightOfParams);
 	GUIwrap::getInstance().DrawFileDialog();
-
+	GUIwrap::getInstance().CreateViewPort();
 	GUIwrap::getInstance().EndDockSpace();
 
 

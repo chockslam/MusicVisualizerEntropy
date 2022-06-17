@@ -6,7 +6,7 @@ Window::Window(std::string WindowName,HICON icon, INT width, INT height)
 	: SubObject("EngineContainer", WindowName, icon), m_Width(width), m_Height(height)
 {
 
-	Initialize(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU);
+	Initialize(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU| WS_THICKFRAME);
 	SetupRawInput();
 	pGfx = std::make_unique<Graphics>(m_Handle);
 }
@@ -26,7 +26,7 @@ VOID Window::Initialize(UINT type)
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
 
-	RECT R = { 0, 0, m_Width, m_Height };
+	RECT R = { (desktop.right / 2) - (m_Width / 2), ((desktop.bottom / 2) - (m_Height / 2)), m_Width, m_Height };
 	AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
 	int width = R.right - R.left;
 	int height = R.bottom - R.top;
@@ -239,30 +239,40 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			mouse.OnWheelDelta(pt.x, pt.y, delta);
 			break;
 		}
-	case WM_INPUT:
-	{
-		if (!mouse.RawEnabled())
+		case WM_INPUT:
 		{
-			break;
-		}
-		UINT dataSize;
-		GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &dataSize, sizeof(RAWINPUTHEADER)); //Need to populate data size first
-	
-		if (dataSize > 0)
-		{
-			std::unique_ptr<BYTE[]> rawdata = std::make_unique<BYTE[]>(dataSize);
-			if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, rawdata.get(), &dataSize, sizeof(RAWINPUTHEADER)) == dataSize)
+			if (!mouse.RawEnabled())
 			{
-				RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawdata.get());
-				if (raw->header.dwType == RIM_TYPEMOUSE && 
-					( raw->data.mouse.lLastX != 0 || raw->data.mouse.lLastY != 0 ) )
+				break;
+			}
+			UINT dataSize;
+			GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &dataSize, sizeof(RAWINPUTHEADER)); //Need to populate data size first
+	
+			if (dataSize > 0)
+			{
+				std::unique_ptr<BYTE[]> rawdata = std::make_unique<BYTE[]>(dataSize);
+				if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, rawdata.get(), &dataSize, sizeof(RAWINPUTHEADER)) == dataSize)
 				{
-					mouse.OnMouseMoveRaw(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+					RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawdata.get());
+					if (raw->header.dwType == RIM_TYPEMOUSE && 
+						( raw->data.mouse.lLastX != 0 || raw->data.mouse.lLastY != 0 ) )
+					{
+						mouse.OnMouseMoveRaw(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+					}
 				}
 			}
+
+				break;
 		}
 
-			break;
+		case WM_SIZE: {
+			if (pGfx) {
+				RECT desktop;
+				GetWindowRect(this->m_Handle, &desktop);				
+				int width = desktop.right - desktop.left;
+				int height = desktop.bottom - desktop.top;
+				pGfx->ResizeImgui(width, height);
+			}
 		}
 
 	
