@@ -23,7 +23,7 @@ class Graphics
 {
 	friend class Bindable;
 public:
-	Graphics(HWND hWnd);
+	Graphics(HWND& hWnd);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
@@ -34,12 +34,14 @@ public:
 	std::shared_ptr<RenderTexture> getRenderTexture();
 	void switchRenderTargetToTexture( );
 	void switchRenderTargetToWindow( );
-	void ResizeImgui(float width, float height);
+	void ResizeImgui(UINT width, UINT height);
 	DirectX::XMMATRIX GetProjection() const ;						
 	void SetCamera(DirectX::FXMMATRIX cam) ;						// Set camera transform.
 	DirectX::XMMATRIX GetCamera() const ;							// Get camera transform.
+	void CleanupRenderTarget();
+	void CreateRenderTarget();
 private:
-	void initImgui(HWND hwnd) ;
+	void initImgui(HWND& hwnd) ;
 private:
 	DirectX::XMMATRIX projection;											// Matrix that represents projection.
 	DirectX::XMMATRIX camera;												// Matrix that represent camera transform (used to display object relatively to cameras position (See class TransformCBuf)).

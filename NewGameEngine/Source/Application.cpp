@@ -25,7 +25,6 @@ Application::Application()
 	wnd.EnableCursor(); // Enable Cursor
 
 	this->gm = std::make_shared<GUImanager>();
-
 	this->gm->LoadTextures(wnd.Gfx());
 	this->gm->Start(cam, wnd);
 	

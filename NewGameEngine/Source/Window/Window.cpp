@@ -6,7 +6,7 @@ Window::Window(std::string WindowName,HICON icon, INT width, INT height)
 	: SubObject("EngineContainer", WindowName, icon), m_Width(width), m_Height(height)
 {
 
-	Initialize(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU| WS_THICKFRAME);
+	Initialize(WS_OVERLAPPEDWINDOW);
 	SetupRawInput();
 	pGfx = std::make_unique<Graphics>(m_Handle);
 }
@@ -26,7 +26,7 @@ VOID Window::Initialize(UINT type)
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
 
-	RECT R = { (desktop.right / 2) - (m_Width / 2), ((desktop.bottom / 2) - (m_Height / 2)), m_Width, m_Height };
+	RECT R = {m_Width, m_Height };
 	AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
 	int width = R.right - R.left;
 	int height = R.bottom - R.top;
@@ -39,14 +39,14 @@ VOID Window::Initialize(UINT type)
 		PostQuitMessage(0); //close window
 	}
 		
-	ShowWindow(m_Handle, SW_SHOW);
-	
+	ShowWindow(m_Handle, SW_SHOWDEFAULT);
+	UpdateWindow(m_Handle);
 
 		
 
 }
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -56,13 +56,29 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 	switch (message)
 	{
+
+		
 			// we don't want the DefProc to handle this message because
 			// we want our destructor to destroy the window, so return 0 instead of break
 		case WM_CLOSE:
 			PostQuitMessage(0);
 			return 0;
 
-
+		case WM_SIZE: {
+			if (pGfx) {
+				//RECT desktop;
+				//GetWindowRect(this->m_Handle, &desktop);				
+				UINT width = (UINT)LOWORD(lParam);
+				UINT height = (UINT)HIWORD(lParam);
+				m_Width = width;
+				m_Height = height;
+				pGfx->ResizeImgui(width, height);
+				//ImGuiIO& io = ImGui::GetIO();
+				//io.DisplaySize = ImVec2(x, y)
+				return 0;
+			}
+			
+		}
 			// clear keystate when window loses focus to prevent input getting "stuck"
 		case WM_KILLFOCUS:
 			kbd.ClearState();
@@ -163,6 +179,16 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			}
 			break;
 		}
+		case WM_DPICHANGED:
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+			{
+				//const int dpi = HIWORD(wParam);
+				//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+				const RECT* suggested_rect = (RECT*)lParam;
+				::SetWindowPos(hWnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+			}
+			break;
+		
 		case WM_LBUTTONDOWN:
 		{
 			SetForegroundWindow(hWnd);
@@ -203,11 +229,11 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			const POINTS pt = MAKEPOINTS(lParam);
 			mouse.OnLeftReleased(pt.x, pt.y);
 			// release mouse if outside of window
-			if (pt.x < 0 || pt.x >= m_Width || pt.y < 0 || pt.y >= m_Height)
-			{
-				ReleaseCapture();
-				mouse.OnMouseLeave();
-			}
+			//if (pt.x < 0 || pt.x >= m_Width || pt.y < 0 || pt.y >= m_Height)
+			//{
+			//	ReleaseCapture();
+			//	mouse.OnMouseLeave();
+			//}
 			break;
 		}
 		case WM_RBUTTONUP:
@@ -220,11 +246,11 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			const POINTS pt = MAKEPOINTS(lParam);
 			mouse.OnRightReleased(pt.x, pt.y);
 			// release mouse if outside of window
-			if (pt.x < 0 || pt.x >= m_Width || pt.y < 0 || pt.y >= m_Height)
-			{
-				ReleaseCapture();
-				mouse.OnMouseLeave();
-			}
+			//if (pt.x < 0 || pt.x >= m_Width || pt.y < 0 || pt.y >= m_Height)
+			//{
+			//	ReleaseCapture();
+			//	mouse.OnMouseLeave();
+			//}
 			break;
 		}
 		case WM_MOUSEWHEEL:
@@ -265,19 +291,11 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 				break;
 		}
 
-		case WM_SIZE: {
-			if (pGfx) {
-				RECT desktop;
-				GetWindowRect(this->m_Handle, &desktop);				
-				int width = desktop.right - desktop.left;
-				int height = desktop.bottom - desktop.top;
-				pGfx->ResizeImgui(width, height);
-			}
-		}
-
+		
 	
 	}
-	return CommonMessageHandler(hWnd, message, wParam, lParam);
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 Graphics& Window::Gfx()

@@ -211,8 +211,8 @@ void Graphics::ResizeImgui(UINT width, UINT height)
 	pSwap->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 	CreateRenderTarget();
 
-	//ImGuiIO& io = ImGui::GetIO();
-	//io.DisplaySize = ImVec2(width, height);
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2(width, height);
 
 	//  pContext->OMSetRenderTargets(0, 0, 0);
 	//  //pWindowTarget->Release();

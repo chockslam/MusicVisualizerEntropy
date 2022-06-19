@@ -15,7 +15,7 @@ VOID SubObject::RegisterNewClass() {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX); //size of the window in bits
-	wcex.style = CS_HREDRAW | CS_VREDRAW; //vertical and horizontal drawing
+	wcex.style = CS_CLASSDC;//CS_HREDRAW | CS_VREDRAW; //vertical and horizontal drawing
 	wcex.cbClsExtra = 0; // extra memory for the program
 	wcex.cbWndExtra = 0;
 
