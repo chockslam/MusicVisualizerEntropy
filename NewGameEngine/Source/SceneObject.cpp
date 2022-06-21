@@ -1,6 +1,6 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
+SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs, std::string channel)
 {
 	this->vs.append(vs);
 
@@ -13,9 +13,12 @@ SceneObject::SceneObject(Graphics& gfx, const char* vs, const char* ps, DirectX:
 	this->initPos.y = pos.y;
 	this->initPos.z = pos.z;
 
+	this->channel = channel;
+
 	Reset();
 	
 }
+
 
 SceneObject::~SceneObject()
 {

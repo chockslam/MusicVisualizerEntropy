@@ -68,6 +68,17 @@ void Application::DoFrame(float timeFrame)
 	musParams[0] = static_cast<float>(AudioIO::getInstance().audio->averageB) * weightOfParams[0];
 	musParams[1] = static_cast<float>(AudioIO::getInstance().audio->averageM) * weightOfParams[1];
 	musParams[2] = static_cast<float>(AudioIO::getInstance().audio->averageT) * weightOfParams[2];
+
+	if (AudioIO::getInstance().audio->isStereoSepar) {
+		musParams[3] = static_cast<float>(AudioIO::getInstance().audio->averageBR) * weightOfParams[0];
+		musParams[4] = static_cast<float>(AudioIO::getInstance().audio->averageMR) * weightOfParams[1];
+		musParams[5] = static_cast<float>(AudioIO::getInstance().audio->averageTR) * weightOfParams[2];
+	}
+	else {
+		musParams[3] = 1.0f;
+		musParams[4] = 1.0f;
+		musParams[5] = 1.0f;
+	}
 	
 	//wnd.Gfx().BeginGUIFrame(0.07f, 0.0f, 0.12f);
 	//	
