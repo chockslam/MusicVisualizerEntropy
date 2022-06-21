@@ -7,7 +7,7 @@ class Graphics;
 class GUImanager {
 public:
 	GUImanager();
-	void Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame);
+	void Update(float musParams[6], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame);
 	void Start(ChiliCamera& cam, Window& wnd);
 
 	void LoadTextures(Graphics& gfx);

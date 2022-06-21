@@ -51,7 +51,7 @@ public:
     bool isFileDialogActive();
     void setSlidersActive(bool status);
     void setFileDialogActive(bool status);
-    void showFFT(double freq[], double magn[], float musParams[3]);     // Show fft graph (For development purposes)w
+    void showFFT(double freq[], double magn[], float musParams[3], const char* name);     // Show fft graph (For development purposes)w
     void EnableDocking();
     void showDemoWindow();
     void CreateDockSpace(bool* p_open);

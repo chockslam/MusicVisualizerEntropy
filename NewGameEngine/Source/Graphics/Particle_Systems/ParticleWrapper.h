@@ -6,7 +6,7 @@ class ParticleWrapper : public SceneObject
 public:
 	ParticleWrapper(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr);
 	void Reset();
-	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const;
+	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[6], float timeFrame) const;
 	//void Draw(Graphics& gfx) const;
 	bool isActive() { return this->active; };
 	void activate() { this->active = true; };

@@ -18,9 +18,13 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 	AddParticleSystem(gfx);
 	
 	// Create 3 sphere-filled squares. Pixel Shader visualization.
-	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3{-57.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqBMT_PS.cso", "Solid_RGBeqBTM_PS.cso", "");
-	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-47.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMTB_PS.cso", "Solid_RGBeqTMB_PS.cso", "");
-	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-37.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMBT_PS.cso", "Solid_RGBeqTBM_PS.cso", "");
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3{-57.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqBMT_PS.cso", "Solid_RGBeqBTM_PS.cso",	"");
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-47.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMTB_PS.cso", "Solid_RGBeqTMB_PS.cso",	"");
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-37.0f, -10.0f, 15.0f}, 10, "Solid_RGBeqMBT_PS.cso", "Solid_RGBeqTBM_PS.cso",	"");
+
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3{-57.0f, -10.0f, 7.0f}, 10, "Solid_RGBeqBMT_PS.cso", "Solid_RGBeqBTM_PS.cso", "", "right");
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-47.0f, -10.0f, 7.0f}, 10, "Solid_RGBeqMTB_PS.cso", "Solid_RGBeqTMB_PS.cso","", "right");
+	FillSpheresAlgorithm(gfx, DirectX::XMFLOAT3 {-37.0f, -10.0f, 7.0f}, 10, "Solid_RGBeqMBT_PS.cso", "Solid_RGBeqTBM_PS.cso","", "right");
 	
 	// Geometry + Pixel Shader visualization
 	makeGeometrySphere(gfx);
@@ -29,7 +33,7 @@ void SceneManager::StartScene(Graphics& gfx, std::string scene)
 
 }
 
-void SceneManager::Update(float musParams[3], float timeFrame)
+void SceneManager::Update(float musParams[6], float timeFrame)
 {
 
 	testPS1->Update(musParams, timeFrame);
@@ -61,7 +65,7 @@ void SceneManager::Update(float musParams[3], float timeFrame)
 	
 }
 
-void SceneManager::EmitParticles(float musParams[3], ParticleSystem &ps, std::string feature )
+void SceneManager::EmitParticles(float musParams[6], ParticleSystem &ps, std::string feature )
 {
 	
 
@@ -164,7 +168,7 @@ void SceneManager::makeGeometrySphere(Graphics& gfx)
 ///// <param name="shader_2"> Name of the second shader</param>
 ///// <param name="dest"> destination array, which is passed by reference, stores unique pointers to sphere objects</param>
 ///// <param name="gs">Optional geometry shader</param>
-void SceneManager::FillSpheresAlgorithm(Graphics& gfx, DirectX::XMFLOAT3 offset, int size, std::string shader_1, std::string shader_2, std::string gs)
+void SceneManager::FillSpheresAlgorithm(Graphics& gfx, DirectX::XMFLOAT3 offset, int size, std::string shader_1, std::string shader_2, std::string gs, std::string channel)
 {
 
 	int start = 1;
@@ -184,65 +188,129 @@ void SceneManager::FillSpheresAlgorithm(Graphics& gfx, DirectX::XMFLOAT3 offset,
 		for (int i = start; i <= max; i++) {
 			for (int j = start; j <= max; j++) {
 				if (i == start || i == max) {
-					if (gs_c)
-						ObjectFactory::getInstance().AddSphere(
-							gfx,
-							DirectX::XMFLOAT3{
-								offset.x + 1.0f * j,
-								offset.y + 1.0f * i,
-								offset.z
-							},
-							0.4f,
-							12, 24,
-							"SolidVS.cso",
-							shader.c_str(),
-							gs_c
-						);
-					else
-						ObjectFactory::getInstance().AddSphere(
-							gfx,
-							DirectX::XMFLOAT3{
-								offset.x + 1.0f * j,
-								offset.y + 1.0f * i,
-								offset.z
-							},
-							0.4f,
-							12, 24,
-							"SolidVS.cso",
-							shader.c_str()
-						);
+					if (gs_c) {
+						if(channel == "left")
+							ObjectFactory::getInstance().AddSphere(
+								gfx,
+								DirectX::XMFLOAT3{
+									offset.x + 1.0f * j,
+									offset.y + 1.0f * i,
+									offset.z
+								},
+								0.4f,
+								12, 24,
+								"SolidVS.cso",
+								shader.c_str(),
+								gs_c
+							);
+						else if(channel == "right") {
+							ObjectFactory::getInstance().AddSphereRightChannel(
+								gfx,
+								DirectX::XMFLOAT3{
+									offset.x + 1.0f * j,
+									offset.y + 1.0f * i,
+									offset.z
+								},
+								0.4f,
+								12, 24,
+								"SolidVS.cso",
+								shader.c_str(),
+								gs_c
+							);
+						}
+					}
+					else {
+						if (channel == "left")
+							ObjectFactory::getInstance().AddSphere(
+								gfx,
+								DirectX::XMFLOAT3{
+									offset.x + 1.0f * j,
+									offset.y + 1.0f * i,
+									offset.z
+								},
+								0.4f,
+								12, 24,
+								"SolidVS.cso",
+								shader.c_str()
+							);
+						else if (channel == "right") 
+							ObjectFactory::getInstance().AddSphereRightChannel(
+								gfx,
+								DirectX::XMFLOAT3{
+									offset.x + 1.0f * j,
+									offset.y + 1.0f * i,
+									offset.z
+								},
+								0.4f,
+								12, 24,
+								"SolidVS.cso",
+								shader.c_str(),
+								gs_c
+							);
+					}
 				}
 				else {
 					if (j == start || j == max) {
-						if (gs_c)
-							ObjectFactory::getInstance().AddSphere(
-								gfx,
-								DirectX::XMFLOAT3{
-									offset.x + 1.0f * j,
-									offset.y + 1.0f * i,
-									offset.z
-								},
-								0.4f,
-								12, 24,
-								"SolidVS.cso",
-								shader.c_str(),
-								gs_c
-							);
-						else
-							ObjectFactory::getInstance().AddSphere(
-								gfx,
-								DirectX::XMFLOAT3{
-									offset.x + 1.0f * j,
-									offset.y + 1.0f * i,
-									offset.z
-								},
-								0.4f,
-								12, 24,
-								"SolidVS.cso",
-								shader.c_str(),
-								gs_c
-							);
-
+						if (gs_c) {
+							if (channel == "left")
+								ObjectFactory::getInstance().AddSphere(
+									gfx,
+									DirectX::XMFLOAT3{
+										offset.x + 1.0f * j,
+										offset.y + 1.0f * i,
+										offset.z
+									},
+									0.4f,
+									12, 24,
+									"SolidVS.cso",
+									shader.c_str(),
+									gs_c
+								);
+							else if (channel == "right") {
+								ObjectFactory::getInstance().AddSphereRightChannel(
+									gfx,
+									DirectX::XMFLOAT3{
+										offset.x + 1.0f * j,
+										offset.y + 1.0f * i,
+										offset.z
+									},
+									0.4f,
+									12, 24,
+									"SolidVS.cso",
+									shader.c_str(),
+									gs_c
+								);
+							}
+						}
+						else {
+							if (channel == "left")
+								ObjectFactory::getInstance().AddSphere(
+									gfx,
+									DirectX::XMFLOAT3{
+										offset.x + 1.0f * j,
+										offset.y + 1.0f * i,
+										offset.z
+									},
+									0.4f,
+									12, 24,
+									"SolidVS.cso",
+									shader.c_str()
+								);
+							else if (channel == "right")
+								ObjectFactory::getInstance().AddSphereRightChannel(
+									gfx,
+									DirectX::XMFLOAT3{
+										offset.x + 1.0f * j,
+										offset.y + 1.0f * i,
+										offset.z
+									},
+									0.4f,
+									12, 24,
+									"SolidVS.cso",
+									shader.c_str(),
+									gs_c
+								);
+						}
 					}
 				}
 			}

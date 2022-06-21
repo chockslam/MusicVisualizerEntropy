@@ -2,10 +2,9 @@
 #include <imgui.h>
 #include <implot.h>
 
-WrapperSolidSphere::WrapperSolidSphere(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs)
+WrapperSolidSphere::WrapperSolidSphere(Graphics& gfx, float radius, int latDiv, int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs, std::string channel)
 	:
-	//mesh(gfx, radius,latDiv,longDiv, vs, ps, gs),
-	SceneObject(gfx, vs, ps, pos, gs),
+	SceneObject(gfx, vs, ps, pos, gs, channel),
 	cbuf(gfx),
 	cbufG(gfx, 1u)
 {
@@ -30,11 +29,15 @@ void WrapperSolidSphere::Reset()
 
 
 
-void WrapperSolidSphere::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const
+void WrapperSolidSphere::Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[6], float timeFrame) const
 {
 	if (this->active) {
 		auto dataCopy = cbData;
-		DirectX::XMVECTOR color = { musParams[0], musParams[1], musParams[2] };
+		DirectX::XMVECTOR color = { 1.0f, 1.0f ,1.0f };
+		if (this->channel == "left")
+			color = { musParams[0], musParams[1], musParams[2] };
+		else if(this->channel == "right")
+			color = { musParams[3], musParams[4], musParams[5] };
 		//const auto pos = DirectX::XMLoadFloat3(pos);
 		DirectX::XMStoreFloat3(&dataCopy.color, color);
 

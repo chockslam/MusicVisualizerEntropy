@@ -48,18 +48,29 @@ public:
 		Uint32 length;
 		SDL_AudioFormat format;
 		Uint8 silence;
-		fftw_plan plan;
-		fftw_complex* in; // Time domain
-		fftw_complex* out; // Frequency domain
+		fftw_plan planL;
+		fftw_plan planR;
+
+		fftw_complex* inL; // Time domain
+		fftw_complex* inR; // Time domain
+		fftw_complex* outL; // Frequency domain
+		fftw_complex* outR; // Frequency domain
 
 		double freq[SAMPLE_NUM/2]; // X-axis - frequency
 		double magn[SAMPLE_NUM/2]; // Y-axis - magnitude
+		double freqR[SAMPLE_NUM/2]; // X-axis - frequency
+		double magnR[SAMPLE_NUM/2]; // Y-axis - magnitude
 
 		double averageB; // average of bass domain
 		double averageM; // average of mid-range domain
 		double averageT; // average of treble domain
+		
+		double averageBR; // average of bass domain
+		double averageMR; // average of mid-range domain
+		double averageTR; // average of treble domain
 
 
+		bool isStereoSepar = true;
 		bool m_haveData; // if buffer exists
 
 	};
@@ -78,10 +89,13 @@ public:
 	void PauseAudio();								// Pause audio.
 	void SwitchAudioFile(std::string filename);		// Switch between files.
 
+	AudioData* getAudioData() { return this->audio; };
+
 
 	static double Get16bitAudioSample(Uint8* bytebuffer, SDL_AudioFormat format); // 16-bit audio sample
 	static void myCallback(void*, Uint8*, int);									  // callback function passed (needed for SDL implementation)
-	static void output(struct wrapper arg);											
+	static void output(struct wrapper arg);		
+
 	
 
 private:
@@ -91,6 +105,8 @@ private:
 	SDL_AudioFormat m_dataFormat;
 	Uint32 m_length;
 	Uint8* m_buffer;
+
+
 
 	AudioData* audio = new AudioData();
 

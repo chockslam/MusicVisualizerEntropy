@@ -17,6 +17,23 @@ void ObjectFactory::SetUpLevelManager()
 	}
 }
 
+void ObjectFactory::AddSphereRightChannel(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius, float latDiv, float longDiv, const char* vs, const char* ps, const char* gs)
+{
+	if (this->om) {
+		this->om->AddObject(
+			std::make_shared<WrapperSolidSphere>(
+				gfx,
+				radius, latDiv, longDiv,
+				vs,
+				ps,
+				pos,
+				gs,
+				"right"
+				)
+		);
+	}
+}
+
 void ObjectFactory::AddSphere(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius, float latDiv, float longDiv, const char* vs, const char* ps, const char* gs)
 {
 	if (this->om) {

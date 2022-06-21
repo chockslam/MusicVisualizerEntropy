@@ -11,7 +11,7 @@ GUImanager::GUImanager()
 	//GUIwrap::getInstance().EnableDocking();
 }
 
-void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame)
+void GUImanager::Update(float musParams[6], float weightOfParams[3], Window& wnd, ChiliCamera& cam, float timeFrame)
 {
 	wnd.Gfx().switchRenderTargetToWindow();
 	this->ToggleCursor(wnd);
@@ -30,7 +30,12 @@ void GUImanager::Update(float musParams[3], float weightOfParams[3], Window& wnd
 	GUIwrap::getInstance().DrawSliders(weightOfParams);
 	GUIwrap::getInstance().DrawFileDialog();
 
+	GUIwrap::getInstance().showFFT(AudioIO::getInstance().getAudioData()->freq, AudioIO::getInstance().getAudioData()->magn, musParams, "Left");
+	GUIwrap::getInstance().showFFT(AudioIO::getInstance().getAudioData()->freqR, AudioIO::getInstance().getAudioData()->magnR, musParams, "Right");
+
+
 	GUIwrap::getInstance().EndDockSpace();
+
 
 
 	if (wnd.CursorEnabled) {

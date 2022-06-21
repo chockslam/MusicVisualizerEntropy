@@ -116,12 +116,12 @@ void GUIwrap::ViewIndicator(const int& indicator)
 	style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.9f, 1.00f);
 }
 
-void GUIwrap::showFFT(double freq[], double magn[], float musParams[3])
+void GUIwrap::showFFT(double freq[], double magn[], float musParams[3], const char* name)
 {
 	
-	ImGui::Begin("Plot Full");
+	ImGui::Begin(name);
 	if (ImPlot::BeginPlot("My Plot Full", "Frequency", "Magnitude")) {
-		ImPlot::PlotLine("My Line Plot Full", freq, magn, 1024);
+		ImPlot::PlotLine("My Line Plot Full", freq, magn, 512);
 		ImPlot::EndPlot();
 	}
 

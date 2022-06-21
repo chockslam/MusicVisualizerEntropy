@@ -13,10 +13,10 @@
 class WrapperSolidSphere : public SceneObject
 {
 public:
-	WrapperSolidSphere(Graphics& gfx, float radius,int latDiv,int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr);
+	WrapperSolidSphere(Graphics& gfx, float radius,int latDiv,int longDiv, const char* vs, const char* ps, DirectX::XMFLOAT3 pos, const char* gs = nullptr, std::string channel = "left");
 	~WrapperSolidSphere();
 	void Reset() ;
-	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[3], float timeFrame) const ;
+	void Bind(Graphics& gfx, DirectX::FXMMATRIX view, float musParams[6], float timeFrame) const;
 private:
 	void _Reset();
 	/// <summary>
