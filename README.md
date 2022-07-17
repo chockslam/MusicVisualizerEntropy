@@ -1,9 +1,6 @@
 # MusicVisualizerEntropy
 Music visualizer software built using principles utilized in games development industry, i.e. game engine architecture was used. 
 
-# Assessment_SAfG
-Simple 2D Game Engine built on top of a DirectX wrapper.
-
 ## Documentation.
 Code is fully commented.
 
